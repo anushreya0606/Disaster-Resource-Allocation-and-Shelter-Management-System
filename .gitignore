@@ -1,0 +1,20 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# SQLite Runtime Databases & Logs
+*.db
+*.db-journal
+*.db-wal
+*.log
+
+# OS & IDE temporary files
+.DS_Store
+Thumbs.db
+.idea/
