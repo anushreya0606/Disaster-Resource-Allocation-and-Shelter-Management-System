@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Resource Allocation & Shelter Management System (OSDBMS Engineering)</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Leaflet GIS Map CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header>
+        <div class="brand-title">
+            🛡️ Disaster Shelter Management Platform
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <span class="team-badge">Team ID: OSDBMS-V-2026-T135</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Graphic Era University | 5th Sem PBL</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- LEFT COLUMN: Map, Telemetry, Concurrency Benchmark -->
+        <div class="left-col">
+            <!-- System Telemetry Bar -->
+            <div class="card">
+                <div class="card-title">
+                    <span>⚡ OS & DBMS Kernel Telemetry</span>
+                    <span style="font-size: 0.75rem; color: var(--accent-green);">● LIVE DAEMON ACTIVE</span>
+                </div>
+                <div class="telemetry-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Active Thread Pool</div>
+                        <div class="stat-value" id="stat-threads">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Mutex Contentions</div>
+                        <div class="stat-value" style="color: var(--accent-amber);" id="stat-contentions">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Avg Lock Wait (ms)</div>
+                        <div class="stat-value" style="color: var(--primary-blue);" id="stat-wait">0.0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">System RPS</div>
+                        <div class="stat-value" id="stat-rps">0.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaflet GIS Map -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📍 Indian GIS Shelter Location & Spatial Proximity Engine</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);" id="shelter-count-label">Loading Shelters...</span>
+                </div>
+                <div id="map"></div>
+            </div>
+
+            <!-- Concurrency Load Benchmark Runner -->
+            <div class="card">
+                <div class="card-title">
+                    <span>🔥 Multi-Threaded Concurrency Surge Benchmark</span>
+                    <span class="badge badge-open">Pessimistic Locking Test</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Simulate 50 to 500 parallel evacuee requests attempting to book beds simultaneously. Verifies ACID transaction row locks and zero overbooking integrity.
+                </p>
+                <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                    <div class="form-group" style="margin: 0; flex: 1;">
+                        <label>Select Target Shelter</label>
+                        <select id="benchmark-shelter-select" class="form-control"></select>
+                    </div>
+                    <div class="form-group" style="margin: 0; width: 160px;">
+                        <label>Concurrent Threads</label>
+                        <input type="number" id="benchmark-threads-input" class="form-control" value="50" min="10" max="500">
+                    </div>
+                    <button class="btn btn-danger" style="margin-top: 1.25rem;" onclick="runConcurrencyBenchmark()">
+                        🚀 Run Load Test
+                    </button>
+                </div>
+                <div id="benchmark-result-box" style="display: none; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; font-size: 0.85rem;">
+                </div>
+            </div>
+
+            <!-- Kerala Floods Dataset View -->
+            <div class="card">
+                <div class="card-title">
+                    <span>🌊 Kerala Floods 2018 Disaster Dataset Replay</span>
+                </div>
+                <div style="max-height: 240px; overflow-y: auto;">
+                    <table id="kerala-dataset-table">
+                        <thead>
+                            <tr>
+                                <th>District</th>
+                                <th>Rainfall (mm)</th>
+                                <th>Severity</th>
+                                <th>Evacuated</th>
+                                <th>Camps</th>
+                                <th>Casualties</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: MLFQ Scheduler, SOS Form, Offline IPC -->
+        <div class="right-col">
+            <!-- OS MLFQ Priority Triage Queue -->
+            <div class="card">
+                <div class="card-title">
+                    <span>⏳ OS MLFQ Priority Triage Scheduler</span>
+                    <span style="font-size: 0.75rem; color: var(--accent-amber);" id="aging-status-label">Aging Daemon: Active (8s)</span>
+                </div>
+                <div class="queue-column critical">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-red);">
+                        QUEUE 0: CRITICAL MEDICAL (P0) - <span id="q0-count">0</span>
+                    </div>
+                    <div id="q0-list"></div>
+                </div>
+                <div class="queue-column vulnerable">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-amber);">
+                        QUEUE 1: VULNERABLE (P1) - <span id="q1-count">0</span>
+                    </div>
+                    <div id="q1-list"></div>
+                </div>
+                <div class="queue-column general">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-green);">
+                        QUEUE 2: GENERAL POPULATION (P2) - <span id="q2-count">0</span>
+                    </div>
+                    <div id="q2-list"></div>
+                </div>
+            </div>
+
+            <!-- Evacuee Registration Form -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📝 Evacuee SOS Intake Form</span>
+                </div>
+                <form id="sos-register-form" onsubmit="handleEvacueeRegistration(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-name" class="form-control" required placeholder="e.g. Ramesh Kumar">
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Age</label>
+                            <input type="number" id="reg-age" class="form-control" value="35" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Triage Priority</label>
+                            <select id="reg-priority" class="form-control">
+                                <option value="0">Priority 0 (Critical Medical)</option>
+                                <option value="1">Priority 1 (Pregnant / Elderly)</option>
+                                <option value="2" selected>Priority 2 (General Evacuee)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Medical Conditions / Notes</label>
+                        <input type="text" id="reg-medical" class="form-control" placeholder="e.g. Asthma, Oxygen requirement">
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Latitude</label>
+                            <input type="number" step="0.0001" id="reg-lat" class="form-control" value="10.1004" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Longitude</label>
+                            <input type="number" step="0.0001" id="reg-lon" class="form-control" value="76.3570" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">
+                        🚨 Submit SOS Evacuee Request
+                    </button>
+                </form>
+            </div>
+
+            <!-- Offline SMS Socket IPC Simulator -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📡 Offline SMS / LoRa IPC Socket Simulator</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                    Simulates raw socket stream payloads received from cellular blackout regions on TCP Port 9999.
+                </p>
+                <div class="form-group">
+                    <label>Raw SMS Payload Stream</label>
+                    <input type="text" id="sms-raw-input" class="form-control" value="SOS#NAME=Sita Devi#PRIORITY=0#LAT=9.4981#LON=76.3388#BEDS=1#SHELTER_ID=2">
+                </div>
+                <button class="btn" style="width: 100%; background-color: var(--accent-amber);" onclick="sendOfflineSMSIPC()">
+                    📡 Send Socket Stream to IPC Daemon
+                </button>
+                <div id="sms-ack-box" style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--accent-green);"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
