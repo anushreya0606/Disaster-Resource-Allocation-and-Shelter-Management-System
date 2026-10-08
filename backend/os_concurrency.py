@@ -1,3 +1,8 @@
+"""
+Disaster Resource Allocation & Shelter Management System
+OS Concurrency Bounded Buffer & Banker's Algorithm Engine
+Module Lead: Simarjeet Kaur (24021248)
+"""
 import threading
 import time
 from typing import Dict, List, Any, Tuple
