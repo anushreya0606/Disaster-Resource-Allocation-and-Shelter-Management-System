@@ -1,3 +1,8 @@
+/**
+ * Disaster Resource Allocation & Shelter Management System
+ * Frontend Client JavaScript & GIS Map Controller
+ * Module Lead: Akanchha Singh (24012753)
+ */
 let map;
 let shelterMarkers = [];
 let spatialCircles = [];
