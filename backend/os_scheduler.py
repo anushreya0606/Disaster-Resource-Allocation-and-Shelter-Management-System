@@ -1,7 +1,7 @@
 """
-Disaster Resource Allocation & Shelter Management System
+
 OS Multi-Level Feedback Queue (MLFQ) Triage Scheduler & Aging Daemon
-Module Lead: Ishani Nautiyal (24022264)
+
 """
 import threading
 import queue
