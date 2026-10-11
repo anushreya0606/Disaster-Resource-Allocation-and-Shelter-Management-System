@@ -1,4 +1,4 @@
--- Ishani: dashboard queries for disaster_management (SQLite)
+
 -- Run after schema.sql and views.sql. Each SELECT is an independent dashboard panel.
 
 -- 1. Overall operational summary: shelters, beds, evacuees, allocations, pending alerts.
