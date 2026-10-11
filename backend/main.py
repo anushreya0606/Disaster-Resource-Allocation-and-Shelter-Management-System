@@ -126,7 +126,7 @@ def register_evacuee(req: EvacueeRegisterRequest):
 
 @app.post("/api/allocate")
 def allocate_resources(req: AllocationRequest):
-    """Executes Concurrency-Safe Pessimistic ACID Allocation."""
+    """Executes concurrency-safe resource allocation."""
     res = execute_concurrency_safe_allocation(
         evacuee_id=req.evacuee_id,
         shelter_id=req.shelter_id,
@@ -135,6 +135,24 @@ def allocate_resources(req: AllocationRequest):
         food=req.food_units,
         transport=req.transport_units
     )
+
+    if not res.get("success"):
+        error_message = res.get("error", "Allocation failed.")
+
+        if "not found" in error_message.lower():
+            raise HTTPException(status_code=404, detail=error_message)
+
+        if (
+            "insufficient" in error_message.lower()
+            or "already allocated" in error_message.lower()
+            or "not waiting" in error_message.lower()
+            or "closed" in error_message.lower()
+            or "invalid" in error_message.lower()
+        ):
+            raise HTTPException(status_code=409, detail=error_message)
+
+        raise HTTPException(status_code=500, detail=error_message)
+
     return res
 
 @app.get("/api/scheduler/queue")

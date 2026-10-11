@@ -46,72 +46,187 @@ def generate_transaction_hash(evacuee_id: int, shelter_id: int, beds: int) -> st
     raw_payload = f"{evacuee_id}:{shelter_id}:{beds}:{time.time()}"
     return hashlib.sha256(raw_payload.encode('utf-8')).hexdigest()
 
-def execute_concurrency_safe_allocation(evacuee_id: int, shelter_id: int, 
-                                        beds: int = 1, o2: int = 0, food: int = 0, transport: int = 0) -> Dict[str, Any]:
-    """
-    DBMS Concurrency-Safe Transaction:
-    Uses explicit exclusive transaction locking (`BEGIN IMMEDIATE`) and row checks
-    to strictly prevent race conditions and overbooking.
-    """
-    conn = get_db_connection()
-    try:
-        # Step 1: Explicit Pessimistic Lock (BEGIN IMMEDIATE reserves DB write lock)
-        conn.execute("BEGIN IMMEDIATE;")
-        
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT shelter_id, name, available_beds, oxygen_cylinders, food_units, transport_units 
-            FROM shelters WHERE shelter_id = ?
-        """, (shelter_id,))
-        shelter = cursor.fetchone()
-        
-        if not shelter:
-            conn.rollback()
-            return {"success": False, "error": f"Shelter ID {shelter_id} not found."}
-            
-        if shelter["available_beds"] < beds:
-            conn.rollback()
-            return {"success": False, "error": f"Insufficient beds at {shelter['name']}. Requested: {beds}, Available: {shelter['available_beds']}."}
-            
-        if shelter["oxygen_cylinders"] < o2:
-            conn.rollback()
-            return {"success": False, "error": f"Insufficient oxygen cylinders at {shelter['name']}."}
 
-        # Step 2: Atomic State Update
-        new_beds = shelter["available_beds"] - beds
-        new_o2 = shelter["oxygen_cylinders"] - o2
-        new_food = shelter["food_units"] - food
-        new_trans = shelter["transport_units"] - transport
-        
-        cursor.execute("""
-            UPDATE shelters 
-            SET available_beds = ?, oxygen_cylinders = ?, food_units = ?, transport_units = ?, version = version + 1
+def execute_concurrency_safe_allocation(
+    evacuee_id: int,
+    shelter_id: int,
+    beds: int = 1,
+    o2: int = 0,
+    food: int = 0,
+    transport: int = 0
+) -> Dict[str, Any]:
+    """
+    Allocate shelter resources safely using a SQLite write transaction.
+
+    BEGIN IMMEDIATE serializes competing writers. The transaction ensures
+    that resource deductions, evacuee updates, and allocation records
+    succeed together or are rolled back together.
+    """
+
+    # Step 1: Validate input quantities
+    if evacuee_id <= 0 or shelter_id <= 0:
+        return {"success": False, "error": "Invalid evacuee or shelter ID."}
+
+    if beds < 1 or o2 < 0 or food < 0 or transport < 0:
+        return {"success": False, "error": "Invalid resource quantities."}
+
+    conn = get_db_connection()
+
+    try:
+        # Step 2: Acquire SQLite write lock before reading state
+        conn.execute("BEGIN IMMEDIATE")
+        cursor = conn.cursor()
+
+        # Step 3: Confirm that the evacuee exists and is waiting
+        cursor.execute(
+            """
+            SELECT evacuee_id, status, assigned_shelter_id
+            FROM evacuees
+            WHERE evacuee_id = ?
+            """,
+            (evacuee_id,)
+        )
+        evacuee = cursor.fetchone()
+
+        if evacuee is None:
+            conn.rollback()
+            return {"success": False, "error": "Evacuee not found."}
+
+        if (
+            evacuee["status"] != "WAITING"
+            or evacuee["assigned_shelter_id"] is not None
+        ):
+            conn.rollback()
+            return {
+                "success": False,
+                "error": "Evacuee is already allocated or is not waiting."
+            }
+
+        # Step 4: Read shelter status and available resources
+        cursor.execute(
+            """
+            SELECT shelter_id, name, status, available_beds,
+            oxygen_cylinders, food_units, transport_units
+            FROM shelters
             WHERE shelter_id = ?
-        """, (new_beds, new_o2, new_food, new_trans, shelter_id))
-        
-        # Step 3: Update Evacuee Status
-        cursor.execute("""
-            UPDATE evacuees 
+            """,
+            (shelter_id,)
+        )
+        shelter = cursor.fetchone()
+
+        if shelter is None:
+            conn.rollback()
+            return {"success": False, "error": "Shelter not found."}
+
+        if shelter["status"] == "CLOSED":
+            conn.rollback()
+            return {"success": False, "error": "Shelter is closed."}
+
+        requested = {
+            "beds": (beds, shelter["available_beds"]),
+            "oxygen cylinders": (o2, shelter["oxygen_cylinders"]),
+            "food units": (food, shelter["food_units"]),
+            "transport units": (transport, shelter["transport_units"]),
+        }
+
+        for resource, (needed, available) in requested.items():
+            if needed > available:
+                conn.rollback()
+                return {
+                    "success": False,
+                    "error": (
+                        f"Insufficient {resource}. "
+                        f"Requested: {needed}, available: {available}."
+                    )
+                }
+
+        # Step 5: Deduct all resources atomically
+        cursor.execute(
+            """
+            UPDATE shelters
+            SET available_beds = available_beds - ?,
+                oxygen_cylinders = oxygen_cylinders - ?,
+                food_units = food_units - ?,
+                transport_units = transport_units - ?,
+                version = version + 1
+            WHERE shelter_id = ?
+                AND status != 'CLOSED'
+                AND available_beds >= ?
+                AND oxygen_cylinders >= ?
+                AND food_units >= ?
+                AND transport_units >= ?
+            """,
+            (
+                beds, o2, food, transport, shelter_id,
+                beds, o2, food, transport
+            )
+        )
+
+        if cursor.rowcount != 1:
+            conn.rollback()
+            return {
+                "success": False,
+                "error": "Shelter resources changed or are insufficient."
+            }
+
+        # Step 6: Update only an unassigned, waiting evacuee
+        cursor.execute(
+            """
+            UPDATE evacuees
             SET assigned_shelter_id = ?, status = 'ALLOCATED'
             WHERE evacuee_id = ?
-        """, (shelter_id, evacuee_id))
-        
-        # Step 4: Record Cryptographic Allocation Log
+                AND status = 'WAITING'
+                AND assigned_shelter_id IS NULL
+            """,
+            (shelter_id, evacuee_id)
+        )
+
+        if cursor.rowcount != 1:
+            conn.rollback()
+            return {
+                "success": False,
+                "error": "Evacuee was already allocated."
+            }
+
+        # Step 7: Insert the allocation record
         tx_hash = generate_transaction_hash(evacuee_id, shelter_id, beds)
-        cursor.execute("""
-            INSERT INTO allocations (evacuee_id, shelter_id, allocated_beds, allocated_oxygen, allocated_food, allocated_transport, transaction_hash)
+
+        cursor.execute(
+            """
+            INSERT INTO allocations (
+                evacuee_id, shelter_id, allocated_beds,
+                allocated_oxygen, allocated_food, allocated_transport,
+                transaction_hash
+            )
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (evacuee_id, shelter_id, beds, o2, food, transport, tx_hash))
-        
+            """,
+            (evacuee_id, shelter_id, beds, o2, food, transport, tx_hash)
+        )
+
+        allocation_id = cursor.lastrowid
+        remaining_beds = shelter["available_beds"] - beds
+
+        # Step 8: Commit all changes together
         conn.commit()
+
         return {
             "success": True,
+            "message": "Resources allocated successfully.",
+            "allocation_id": allocation_id,
+            "evacuee_id": evacuee_id,
+            "shelter_id": shelter_id,
             "shelter_name": shelter["name"],
-            "remaining_beds": new_beds,
+            "allocated_beds": beds,
+            "remaining_beds": remaining_beds,
             "transaction_hash": tx_hash
         }
-    except Exception as e:
+
+    except Exception:
         conn.rollback()
-        return {"success": False, "error": str(e)}
+        return {
+            "success": False,
+            "error": "Allocation failed. No changes were committed."
+        }
+
     finally:
         conn.close()
