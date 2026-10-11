@@ -1,5 +1,4 @@
--- Ishani: reusable reporting views for disaster_management (SQLite)
--- Matches backend/schema.sql in the project brief.
+
 
 -- Current shelter occupancy, capacity, and remaining resource stock.
 CREATE VIEW IF NOT EXISTS vw_shelter_status AS
