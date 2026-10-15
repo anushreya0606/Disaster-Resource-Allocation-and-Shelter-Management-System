@@ -1,133 +1,165 @@
-"""
-Disaster Resource Allocation & Shelter Management System
-OS Multi-Level Feedback Queue (MLFQ) Triage Scheduler & Aging Daemon
-Module Lead: Ishani Nautiyal (24022264)
+"""OS-inspired triage scheduler.
+
+* Multilevel queue: P0 (critical medical), P1 (vulnerable), P2 (general). Workers always serve the
+  highest non-empty level, like a multilevel feedback queue (MLFQ).
+* Aging daemon: a job that waits longer than AGE_AFTER_S is promoted one level, so P2 cannot starve.
+  Unlike CPU MLFQ there is no demotion: a person's medical priority must never drop because they waited.
+* Producer-consumer bounded buffer: HTTP/SMS handlers are producers, worker threads are consumers.
+  Classic three-primitive solution: `empty` and `full` counting semaphores plus a mutex.
+  threading.Lock / Semaphore are built on POSIX pthread mutexes/condition variables in CPython on Linux.
 """
 import threading
-import queue
 import time
-from typing import Dict, List, Any, Optional
+from collections import deque
+from concurrent.futures import Future
 
-class EvacueeProcess:
-    """Represents an evacuee request as an OS Process in the Triage Scheduler."""
-    def __init__(self, evacuee_id: int, name: str, priority: int, age_years: int, medical_notes: str, lat: float, lon: float):
-        self.evacuee_id = evacuee_id
-        self.name = name
-        self.priority = priority  # 0: Critical Medical, 1: Vulnerable, 2: General
-        self.initial_priority = priority
-        self.age_years = age_years
-        self.medical_notes = medical_notes
-        self.lat = lat
-        self.lon = lon
-        self.created_at = time.time()
-        self.state = "READY"  # READY, RUNNING, PREEMPTED, AGED, COMPLETED
-        self.assigned_shelter_id: Optional[int] = None
-        self.aging_boosted = False
+LEVEL_NAMES = ("P0 Critical", "P1 Vulnerable", "P2 General")
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "evacuee_id": self.evacuee_id,
-            "name": self.name,
-            "priority": self.priority,
-            "initial_priority": self.initial_priority,
-            "age_years": self.age_years,
-            "medical_notes": self.medical_notes,
-            "lat": self.lat,
-            "lon": self.lon,
-            "wait_time_sec": round(time.time() - self.created_at, 1),
-            "state": self.state,
-            "aging_boosted": self.aging_boosted
-        }
 
-class MLFQTriageScheduler:
-    """
-    OS Module: Multi-Level Feedback Queue (MLFQ) Triage Scheduler with Aging.
-    Demonstrates OS CPU scheduling concepts applied to Emergency Disaster Allocation.
-    """
-    def __init__(self, aging_threshold_sec: float = 10.0):
-        self.q0_critical = queue.Queue()   # Priority 0: Medical Triage 1
-        self.q1_vulnerable = queue.Queue() # Priority 1: Elderly, Pregnant
-        self.q2_general = queue.Queue()    # Priority 2: General Population
-        
-        self.aging_threshold = aging_threshold_sec
-        self.lock = threading.Lock()
-        self.active_processes: Dict[int, EvacueeProcess] = {}
-        self.running_process: Optional[EvacueeProcess] = None
-        
-        # Start OS Aging Daemon Thread
-        self.daemon_running = True
-        self.aging_thread = threading.Thread(target=self._aging_daemon_loop, daemon=True)
-        self.aging_thread.start()
+class BufferFull(Exception):
+    pass
 
-    def add_evacuee_process(self, process: EvacueeProcess):
-        """Enqueues an evacuee request into the corresponding MLFQ priority queue."""
-        with self.lock:
-            self.active_processes[process.evacuee_id] = process
-            if process.priority == 0:
-                self.q0_critical.put(process)
-            elif process.priority == 1:
-                self.q1_vulnerable.put(process)
-            else:
-                self.q2_general.put(process)
 
-    def get_next_process_to_schedule(self) -> Optional[EvacueeProcess]:
-        """
-        Preemptive MLFQ Dispatcher:
-        Always serves Queue 0 (Critical) first. If Q0 is empty, serves Q1, then Q2.
-        """
-        with self.lock:
-            if not self.q0_critical.empty():
-                proc = self.q0_critical.get()
-                proc.state = "RUNNING"
-                return proc
-            elif not self.q1_vulnerable.empty():
-                proc = self.q1_vulnerable.get()
-                proc.state = "RUNNING"
-                return proc
-            elif not self.q2_general.empty():
-                proc = self.q2_general.get()
-                proc.state = "RUNNING"
-                return proc
-            return None
+class Job:
+    __slots__ = ("evacuee_id", "base_level", "level", "enqueued_at", "level_since", "future", "promoted")
 
-    def _aging_daemon_loop(self):
-        """
-        OS Aging Daemon:
-        Periodically checks processes waiting in lower queues. If wait time exceeds
-        aging_threshold, promotes them to higher queues to prevent starvation.
-        """
-        while self.daemon_running:
-            time.sleep(2.0)
-            now = time.time()
-            with self.lock:
-                for proc in list(self.active_processes.values()):
-                    if proc.state == "READY" and not proc.aging_boosted:
-                        wait_duration = now - proc.created_at
-                        if wait_duration >= self.aging_threshold and proc.priority > 0:
-                            # Promote Priority (Aging)
-                            old_priority = proc.priority
-                            proc.priority -= 1
-                            proc.aging_boosted = True
-                            proc.state = "AGED"
-                            
-                            # Re-enqueue into promoted priority queue
-                            if proc.priority == 0:
-                                self.q0_critical.put(proc)
-                            elif proc.priority == 1:
-                                self.q1_vulnerable.put(proc)
-                                
-                            print(f"[OS AGING DAEMON] Promoted Evacuee {proc.name} (ID: {proc.evacuee_id}) from Priority {old_priority} -> {proc.priority} after {wait_duration:.1f}s wait.")
+    def __init__(self, evacuee_id, level):
+        now = time.monotonic()
+        self.evacuee_id, self.base_level, self.level = evacuee_id, level, level
+        self.enqueued_at = self.level_since = now
+        self.future = Future()
+        self.promoted = 0
 
-    def get_queue_snapshot(self) -> Dict[str, Any]:
-        """Returns a snapshot of the OS MLFQ queue states for telemetry visualization."""
-        with self.lock:
-            all_procs = [p.to_dict() for p in self.active_processes.values() if p.state != "COMPLETED"]
-            return {
-                "q0_count": self.q0_critical.qsize(),
-                "q1_count": self.q1_vulnerable.qsize(),
-                "q2_count": self.q2_general.qsize(),
-                "active_processes": all_procs
-            }
 
-# Global Scheduler Instance
-triage_scheduler = MLFQTriageScheduler(aging_threshold_sec=8.0)
+class MLFQScheduler:
+    def __init__(self, handler, workers=8, capacity=1000, age_after_s=30.0, aging_interval_s=5.0,
+                 periodic=None, periodic_every_s=20.0):
+        self.handler = handler                      # handler(evacuee_id, queue_wait_ms) -> result
+        self.queues = [deque(), deque(), deque()]
+        self.mutex = threading.Lock()
+        self.empty = threading.Semaphore(capacity)  # free slots
+        self.full = threading.Semaphore(0)          # filled slots
+        self.capacity, self.n_workers = capacity, workers
+        self.age_after_s, self.aging_interval_s = age_after_s, aging_interval_s
+        self.periodic, self.periodic_every_s = periodic, periodic_every_s
+        self.jobs = {}                              # evacuee_id -> Job (queued or running)
+        self.promotions = self.processed = self.busy = 0
+        self._stop = threading.Event()
+        self._threads = []
+
+    # ---------- producer side ----------
+    def submit(self, evacuee_id, level, block_timeout=0.5):
+        with self.mutex:
+            if evacuee_id in self.jobs:
+                return self.jobs[evacuee_id].future
+        if not self.empty.acquire(timeout=block_timeout):
+            raise BufferFull("Scheduler buffer is full")
+        with self.mutex:
+            if evacuee_id in self.jobs:            # another producer queued it meanwhile
+                self.empty.release()
+                return self.jobs[evacuee_id].future
+            job = Job(evacuee_id, level)
+            self.jobs[evacuee_id] = job
+            self.queues[level].append(job)
+        self.full.release()
+        return job.future
+
+    # ---------- consumer side ----------
+    def _take(self):
+        while not self._stop.is_set():
+            if self.full.acquire(timeout=0.5):
+                with self.mutex:
+                    for q in self.queues:           # highest priority first
+                        if q:
+                            job = q.popleft()
+                            break
+                    self.busy += 1
+                self.empty.release()
+                return job
+        return None
+
+    def _worker(self):
+        while True:
+            job = self._take()
+            if job is None:
+                return
+            wait_ms = (time.monotonic() - job.enqueued_at) * 1000
+            try:
+                result = self.handler(job.evacuee_id, wait_ms)
+                if isinstance(result, dict):
+                    result.update(queue_wait_ms=round(wait_ms, 1), promoted_levels=job.promoted)
+                job.future.set_result(result)
+            except Exception as exc:
+                job.future.set_exception(exc)
+            finally:
+                with self.mutex:
+                    self.jobs.pop(job.evacuee_id, None)
+                    self.busy -= 1
+                    self.processed += 1
+
+    # ---------- aging daemon ----------
+    def age_once(self, now=None):
+        now = time.monotonic() if now is None else now
+        moved = 0
+        with self.mutex:
+            for lvl in (1, 2):
+                keep = deque()
+                while self.queues[lvl]:
+                    job = self.queues[lvl].popleft()
+                    if now - job.level_since >= self.age_after_s:
+                        job.level, job.level_since = lvl - 1, now
+                        job.promoted += 1
+                        self.queues[lvl - 1].append(job)
+                        moved += 1
+                    else:
+                        keep.append(job)
+                self.queues[lvl] = keep
+            self.promotions += moved
+        return moved
+
+    def _aging_daemon(self):
+        last_periodic = time.monotonic()
+        while not self._stop.wait(self.aging_interval_s):
+            self.age_once()
+            if self.periodic and time.monotonic() - last_periodic >= self.periodic_every_s:
+                last_periodic = time.monotonic()
+                try:
+                    self.periodic()
+                except Exception as exc:
+                    print("periodic task error:", exc)
+
+    # ---------- lifecycle and inspection ----------
+    def start(self):
+        self._stop.clear()
+        for i in range(self.n_workers):
+            t = threading.Thread(target=self._worker, name=f"alloc-worker-{i}", daemon=True)
+            t.start()
+            self._threads.append(t)
+        t = threading.Thread(target=self._aging_daemon, name="aging-daemon", daemon=True)
+        t.start()
+        self._threads.append(t)
+
+    def stop(self):
+        self._stop.set()
+        for t in self._threads:
+            t.join(timeout=2)
+        self._threads.clear()
+
+    def stats(self):
+        now = time.monotonic()
+        with self.mutex:
+            oldest = [round(now - q[0].enqueued_at, 1) if q else 0 for q in self.queues]
+            return {"levels": [len(q) for q in self.queues], "level_names": LEVEL_NAMES,
+                    "oldest_wait_s": oldest, "promotions": self.promotions, "processed": self.processed,
+                    "busy_workers": self.busy, "workers": self.n_workers, "capacity": self.capacity,
+                    "age_after_s": self.age_after_s}
+
+    def snapshot(self, limit=50):
+        now = time.monotonic()
+        with self.mutex:
+            out = []
+            for lvl, q in enumerate(self.queues):
+                for job in list(q)[:limit]:
+                    out.append({"evacuee_id": job.evacuee_id, "level": lvl, "base_level": job.base_level,
+                                "wait_s": round(now - job.enqueued_at, 1), "promoted": job.promoted})
+            return out

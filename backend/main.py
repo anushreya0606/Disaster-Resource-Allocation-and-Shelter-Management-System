@@ -1,195 +1,241 @@
-import os
-import json
-import time
-from typing import Dict, Any, List, Optional
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+"""FastAPI application: REST API, static frontend, and startup of the background OS components.
+
+Endpoints are plain `def` functions on purpose: FastAPI runs them in its worker thread pool,
+so blocking database work never stalls the asyncio event loop.
+Run:  uvicorn backend.main:app --reload     then open http://127.0.0.1:8000
+"""
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from fastapi import Body, Depends, FastAPI, Header, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, JSONResponse
-from pydantic import BaseModel
 
-from backend.database import init_db, get_db_connection, haversine_distance, execute_concurrency_safe_allocation
-from backend.os_scheduler import triage_scheduler, EvacueeProcess
-from backend.os_concurrency import disaster_event_buffer, bankers_engine
-from backend.os_ipc_daemon import sms_ipc_daemon
-from backend.telemetry import telemetry_collector
-from backend.load_tester import load_tester
+from . import allocator, audit, auth, bankers, config, seed, services, sms_daemon, telemetry
+from .database import get_conn, init_db, one, rows
+from .os_scheduler import MLFQScheduler
 
-app = FastAPI(
-    title="Disaster Resource Allocation & Shelter Management System",
-    description="OSDBMS PBL Engineering Platform - Integrates OS Kernel Concepts & Advanced DBMS Internals",
-    version="2.0.0"
-)
+FRONTEND = Path(__file__).resolve().parent.parent / "frontend"
+state = {"scheduler": None, "sms": None}
 
-# Startup Event: Initialize DB and Start Background OS Daemons
-@app.on_event("startup")
-def on_startup():
-    print("[SYSTEM] Starting OSDBMS Disaster Management Server...")
+
+def scheduler():
+    return state["scheduler"]
+
+
+@asynccontextmanager
+async def lifespan(app):
     init_db()
-    # Seed DB if empty
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) as cnt FROM shelters;")
-    row = cursor.fetchone()
-    conn.close()
-    if row["cnt"] == 0:
-        from scripts.seed_data import seed_database
-        seed_database()
-        
-    sms_ipc_daemon.start_daemon()
+    if seed.seed():
+        print("Database seeded from data/*.csv")
+    sch = MLFQScheduler(allocator.allocate, workers=config.WORKER_THREADS, capacity=config.BUFFER_SIZE,
+                        age_after_s=config.AGE_AFTER_S, aging_interval_s=config.AGING_INTERVAL_S,
+                        periodic=lambda: services.requeue_pending(state["scheduler"]),
+                        periodic_every_s=config.RETRY_WAITING_S)
+    sch.start()
+    state["scheduler"] = sch
+    services.requeue_pending(sch)                 # recover people left QUEUED/WAITING by a restart
+    telemetry.start(sch, config.TELEMETRY_INTERVAL_S)
+    if config.ENABLE_SMS:
+        try:
+            state["sms"] = sms_daemon.start(config.SMS_HOST, config.SMS_PORT, sch)
+            print(f"SMS socket daemon listening on {config.SMS_HOST}:{config.SMS_PORT}")
+        except OSError as exc:
+            print("SMS daemon not started:", exc)
+    yield
+    telemetry.stop()
+    if state["sms"]:
+        state["sms"].shutdown()
+    sch.stop()
 
-# Pydantic Input Schemas
-class EvacueeRegisterRequest(BaseModel):
-    full_name: str
-    age: int
-    gender: str
-    triage_priority: int  # 0: Critical Medical, 1: Vulnerable, 2: General
-    medical_conditions: Optional[str] = "None"
-    latitude: float
-    longitude: float
 
-class AllocationRequest(BaseModel):
-    evacuee_id: int
-    shelter_id: int
-    beds: int = 1
-    oxygen_cylinders: int = 0
-    food_units: int = 0
-    transport_units: int = 0
+app = FastAPI(title="Disaster Resource Allocation and Shelter Management", lifespan=lifespan)
 
-class SMSPayloadRequest(BaseModel):
-    raw_payload: str
 
-class LoadTestRequest(BaseModel):
-    shelter_id: int = 1
-    num_concurrent_requests: int = 50
+# ---------- auth helpers ----------
+def current_user(authorization: str = Header(default="")):
+    token = authorization[7:] if authorization.lower().startswith("bearer ") else ""
+    user = auth.user_for_token(token)
+    if not user:
+        raise HTTPException(401, "Sign in again")
+    user["token"] = token
+    return user
 
-# --- REST API ENDPOINTS ---
+
+def admin_user(user=Depends(current_user)):
+    if user["role"] != "ADMIN":
+        raise HTTPException(403, "Administrators only")
+    return user
+
+
+def _run(fn, *a, **k):
+    """Map service exceptions to HTTP status codes."""
+    try:
+        return fn(*a, **k)
+    except services.DuplicateError as exc:
+        raise HTTPException(409, {"message": str(exc), "existing_id": exc.existing_id})
+    except LookupError as exc:
+        raise HTTPException(404, str(exc))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+
+
+# ---------- auth ----------
+@app.post("/api/auth/login")
+def login(body: dict = Body(...)):
+    res = auth.login(str(body.get("username", "")), str(body.get("password", "")))
+    if not res:
+        raise HTTPException(401, "Wrong username or password")
+    return res
+
+
+@app.post("/api/auth/logout")
+def logout(user=Depends(current_user)):
+    auth.logout(user["token"])
+    return {"ok": True}
+
+
+@app.get("/api/me")
+def me(user=Depends(current_user)):
+    return {k: user[k] for k in ("username", "full_name", "role")}
+
+
+# ---------- intake ----------
+@app.post("/api/intake")
+def intake(body: dict = Body(...), user=Depends(current_user)):
+    return _run(services.register, body, user["user_id"], body.get("source") or "WEB", scheduler())
+
+
+@app.post("/api/intake/batch")
+def intake_batch(body: dict = Body(...), user=Depends(current_user)):
+    """Offline sync: each record carries a client_request_id, so re-sending the batch is safe."""
+    results = []
+    for rec in (body.get("records") or [])[:500]:
+        try:
+            r = services.register(rec, user["user_id"], "OFFLINE_SYNC", scheduler(), wait_s=2)
+            results.append({"client_request_id": rec.get("client_request_id"), "ok": True, **r})
+        except services.DuplicateError as exc:
+            results.append({"client_request_id": rec.get("client_request_id"), "ok": False,
+                            "duplicate": True, "error": str(exc), "existing_id": exc.existing_id})
+        except ValueError as exc:
+            results.append({"client_request_id": rec.get("client_request_id"), "ok": False, "error": str(exc)})
+    return {"results": results}
+
+
+@app.get("/api/evacuees")
+def evacuees(status: str = None, limit: int = 100, user=Depends(current_user)):
+    return services.list_evacuees(status, min(limit, 500))
+
+
+@app.get("/api/evacuees/{evacuee_id}")
+def evacuee(evacuee_id: int, user=Depends(current_user)):
+    return _run(services.evacuee_status, evacuee_id)
+
+
+@app.post("/api/evacuees/{evacuee_id}/discharge")
+def discharge(evacuee_id: int, user=Depends(current_user)):
+    return _run(services.discharge, evacuee_id, scheduler())
+
+
+# ---------- shelters, districts, summary ----------
+@app.get("/api/districts")
+def districts(user=Depends(current_user)):
+    return rows("SELECT district_id, district_name, state, hq_latitude, hq_longitude FROM districts "
+                "ORDER BY state, district_name")
+
+
+@app.get("/api/states")
+def states(user=Depends(current_user)):
+    return [r["state"] for r in rows("SELECT DISTINCT state FROM districts ORDER BY state")]
+
 
 @app.get("/api/shelters")
-def get_all_shelters():
-    """Returns all shelters with calculated capacity percentages and DB status."""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM shelters ORDER BY shelter_id ASC;")
-    shelters = [dict(row) for row in cursor.fetchall()]
-    conn.close()
-    
-    for s in shelters:
-        s["occupancy_percent"] = round(((s["total_beds"] - s["available_beds"]) / max(1, s["total_beds"])) * 100.0, 1)
-    return {"shelters": shelters}
+def shelters(state_name: str = None, q: str = None, status: str = None, user=Depends(current_user)):
+    return services.list_shelters(state_name, q, status)
 
-@app.get("/api/shelters/nearest")
-def get_nearest_shelters(lat: float, lon: float, min_beds: int = 1):
-    """
-    DBMS Spatial Query:
-    Calculates Haversine distance from evacuee GPS coordinates to all open shelters
-    and returns nearest shelters with available capacity.
-    """
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM shelters WHERE available_beds >= ? AND status != 'CLOSED'", (min_beds,))
-    shelters = [dict(row) for row in cursor.fetchall()]
-    conn.close()
-    
-    for s in shelters:
-        s["distance_km"] = round(haversine_distance(lat, lon, s["latitude"], s["longitude"]), 2)
-        s["occupancy_percent"] = round(((s["total_beds"] - s["available_beds"]) / max(1, s["total_beds"])) * 100.0, 1)
-        
-    shelters.sort(key=lambda x: x["distance_km"])
-    return {"nearest_shelters": shelters[:5]}
 
-@app.post("/api/evacuees/register")
-def register_evacuee(req: EvacueeRegisterRequest):
-    """Enqueues evacuee into database and OS MLFQ Triage Scheduler."""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO evacuees (full_name, age, gender, triage_priority, medical_conditions, latitude, longitude)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (req.full_name, req.age, req.gender, req.triage_priority, req.medical_conditions, req.latitude, req.longitude))
-    evacuee_id = cursor.lastrowid
-    conn.commit()
-    conn.close()
-    
-    # Enqueue into OS MLFQ Scheduler
-    proc = EvacueeProcess(
-        evacuee_id=evacuee_id,
-        name=req.full_name,
-        priority=req.triage_priority,
-        age_years=req.age,
-        medical_notes=req.medical_conditions or "",
-        lat=req.latitude,
-        lon=req.longitude
-    )
-    triage_scheduler.add_evacuee_process(proc)
-    
-    return {"success": True, "evacuee_id": evacuee_id, "scheduler_status": proc.to_dict()}
+@app.get("/api/summary")
+def summary(user=Depends(current_user)):
+    return services.summary(scheduler())
 
-@app.post("/api/allocate")
-def allocate_resources(req: AllocationRequest):
-    """Executes Concurrency-Safe Pessimistic ACID Allocation."""
-    res = execute_concurrency_safe_allocation(
-        evacuee_id=req.evacuee_id,
-        shelter_id=req.shelter_id,
-        beds=req.beds,
-        o2=req.oxygen_cylinders,
-        food=req.food_units,
-        transport=req.transport_units
-    )
-    return res
 
-@app.get("/api/scheduler/queue")
-def get_scheduler_queue_snapshot():
-    """Returns OS MLFQ Priority Queue snapshot with aging indicators."""
-    return triage_scheduler.get_queue_snapshot()
+# ---------- alerts ----------
+@app.get("/api/alerts")
+def alerts(include_ack: bool = False, user=Depends(current_user)):
+    where = "" if include_ack else "WHERE a.acknowledged = 0"
+    return rows(f"""SELECT a.*, s.shelter_name FROM alert_queue a LEFT JOIN shelters s ON s.shelter_id = a.shelter_id
+                    {where} ORDER BY a.alert_id DESC LIMIT 200""")
+
+
+@app.post("/api/alerts/{alert_id}/ack")
+def ack(alert_id: int, user=Depends(admin_user)):
+    get_conn().execute("UPDATE alert_queue SET acknowledged = 1 WHERE alert_id = ?", (alert_id,))
+    return {"ok": True}
+
+
+# ---------- scheduler ----------
+@app.get("/api/queue")
+def queue(user=Depends(current_user)):
+    return {"stats": scheduler().stats(), "jobs": scheduler().snapshot(),
+            "waiting": services.list_evacuees("WAITING", 100)}
+
+
+@app.post("/api/queue/retry")
+def retry(user=Depends(admin_user)):
+    return {"requeued": services.requeue_pending(scheduler())}
+
+
+# ---------- audit, integrity, telemetry ----------
+@app.get("/api/audit")
+def audit_log(limit: int = 100, user=Depends(admin_user)):
+    return rows("""SELECT a.allocation_id, a.action, a.evacuee_id, e.full_name, s.shelter_name, a.distance_km,
+                          a.was_fallback, a.priority, a.queue_wait_ms, a.created_at, a.prev_hash, a.hash
+                   FROM allocations a JOIN evacuees e ON e.evacuee_id = a.evacuee_id
+                   JOIN shelters s ON s.shelter_id = a.shelter_id
+                   ORDER BY a.allocation_id DESC LIMIT ?""", (min(limit, 500),))
+
+
+@app.get("/api/audit/verify")
+def audit_verify(user=Depends(admin_user)):
+    return audit.verify_chain(get_conn())
+
+
+@app.get("/api/integrity")
+def integrity(user=Depends(admin_user)):
+    return services.integrity_report()
+
 
 @app.get("/api/telemetry")
-def get_system_telemetry():
-    """Returns real-time OS and DB system telemetry metrics."""
-    tel = telemetry_collector.get_telemetry_snapshot()
-    buf = disaster_event_buffer.get_status()
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM alert_queue ORDER BY alert_id DESC LIMIT 10;")
-    alerts = [dict(r) for r in cursor.fetchall()]
-    conn.close()
-    return {
-        "telemetry": tel,
-        "bounded_buffer": buf,
-        "active_alerts": alerts
-    }
+def telemetry_logs(limit: int = 60, user=Depends(admin_user)):
+    return rows("SELECT * FROM telemetry_logs ORDER BY log_id DESC LIMIT ?", (min(limit, 500),))
 
-@app.post("/api/benchmark/run")
-def run_concurrency_benchmark(req: LoadTestRequest):
-    """Executes multi-threaded concurrency surge load test (50-500 threads)."""
-    if load_tester.is_running:
-        raise HTTPException(status_code=400, detail="Benchmark load test is already running.")
-    res = load_tester.run_benchmark(shelter_id=req.shelter_id, num_concurrent_requests=req.num_concurrent_requests)
-    return res
 
-@app.post("/api/ipc/send_sms")
-def send_offline_sms_ipc(req: SMSPayloadRequest):
-    """Simulates receiving an offline SMS string via socket IPC daemon."""
-    import socket
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(("127.0.0.1", 9999))
-        s.sendall(req.raw_payload.encode('utf-8'))
-        resp = s.recv(1024).decode('utf-8')
-        s.close()
-        return {"success": True, "socket_ack": resp.strip(), "logs": sms_ipc_daemon.latest_sms_logs[:5]}
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+# ---------- Banker's algorithm ----------
+@app.get("/api/bankers/{state_name}")
+def bankers_state(state_name: str, user=Depends(admin_user)):
+    return bankers.state_view(state_name)
 
-@app.get("/api/kerala_floods_data")
-def get_kerala_floods_dataset():
-    """Returns historical Kerala Floods 2018 Indian disaster dataset."""
-    with open("data/kerala_floods_2018.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return {"kerala_floods_2018": data}
 
-# Serve Frontend Static Files
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+@app.post("/api/bankers/request")
+def bankers_request(body: dict = Body(...), user=Depends(admin_user)):
+    return _run(bankers.make_request, int(body.get("shelter_id", 0)), body.get("amounts") or {})
 
-@app.get("/")
-def serve_index():
-    return FileResponse("frontend/index.html")
+
+@app.post("/api/bankers/release")
+def bankers_release(body: dict = Body(...), user=Depends(admin_user)):
+    return _run(bankers.release, int(body.get("shelter_id", 0)), body.get("amounts") or {})
+
+
+# ---------- frontend ----------
+@app.get("/", include_in_schema=False)
+def index():
+    return FileResponse(FRONTEND / "index.html")
+
+
+@app.get("/sw.js", include_in_schema=False)
+def service_worker():
+    # served from the root so the service worker can control the whole app (offline mode)
+    return FileResponse(FRONTEND / "sw.js", media_type="application/javascript")
+
+
+app.mount("/static", StaticFiles(directory=FRONTEND), name="static")

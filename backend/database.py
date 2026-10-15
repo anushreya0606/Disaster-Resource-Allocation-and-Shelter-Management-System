@@ -1,117 +1,75 @@
-import sqlite3
+"""SQLite access layer: WAL mode, one connection per thread, write transactions with lock timing.
+
+SQLite has no row-level locks. BEGIN IMMEDIATE takes the database RESERVED (write) lock up front,
+which is a pessimistic lock: two allocations can never interleave their read-check-update steps.
+On MySQL/PostgreSQL the equivalent is SELECT ... FOR UPDATE on the shelter row.
+"""
 import math
-import hashlib
+import sqlite3
+import threading
 import time
-from typing import List, Dict, Any, Optional
+from contextlib import contextmanager
+from pathlib import Path
 
-DB_PATH = "disaster_management.db"
+from . import config, telemetry
 
-def get_db_connection() -> sqlite3.Connection:
-    """
-    Returns an SQLite connection configured with Write-Ahead Logging (WAL)
-    mode for enhanced concurrency and thread-safe operations.
-    """
-    conn = sqlite3.connect(DB_PATH, timeout=15.0)
+_local = threading.local()
+EARTH_RADIUS_KM = 6371.0088
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    """Great-circle distance in km between two (lat, lon) points."""
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = p2 - p1, math.radians(lon2 - lon1)
+    h = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * EARTH_RADIUS_KM * math.asin(math.sqrt(h))
+
+
+def _connect(path):
+    conn = sqlite3.connect(path, timeout=30, isolation_level=None, check_same_thread=False)
     conn.row_factory = sqlite3.Row
-    # OS DBMS Configuration: Enable Write-Ahead Logging (WAL) and Foreign Keys
-    conn.execute("PRAGMA journal_mode=WAL;")
-    conn.execute("PRAGMA foreign_keys=ON;")
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA synchronous=NORMAL")
+    conn.execute("PRAGMA foreign_keys=ON")
+    conn.execute("PRAGMA busy_timeout=30000")
+    conn.create_function("haversine", 4, haversine, deterministic=True)
     return conn
 
+
+def get_conn():
+    """Each thread gets its own connection (sqlite3 connections must not be shared across threads)."""
+    conn = getattr(_local, "conn", None)
+    if conn is None or getattr(_local, "path", None) != config.DB_PATH:
+        conn = _connect(config.DB_PATH)
+        _local.conn, _local.path = conn, config.DB_PATH
+    return conn
+
+
 def init_db():
-    """Initializes database tables, triggers, and indexes from schema.sql."""
-    conn = get_db_connection()
-    with open("backend/schema.sql", "r", encoding="utf-8") as f:
-        schema_script = f.read()
-    conn.executescript(schema_script)
-    conn.commit()
-    conn.close()
+    Path(config.DB_PATH).parent.mkdir(parents=True, exist_ok=True)
+    schema = (Path(__file__).parent / "schema.sql").read_text(encoding="utf-8")
+    get_conn().executescript(schema)
 
-def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    """
-    Computes the spatial distance in kilometers between two GPS coordinates
-    using the Haversine formula (Spatial GIS Distance Calculation).
-    """
-    R = 6371.0  # Earth's radius in kilometers
-    dlat = math.radians(lat2 - lat1)
-    dlon = math.radians(lon2 - lon1)
-    a = (math.sin(dlat / 2.0) ** 2 +
-         math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) *
-         math.sin(dlon / 2.0) ** 2)
-    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    return R * c
 
-def generate_transaction_hash(evacuee_id: int, shelter_id: int, beds: int) -> str:
-    """Generates a cryptographic SHA-256 block hash for tamper-proof audit logging."""
-    raw_payload = f"{evacuee_id}:{shelter_id}:{beds}:{time.time()}"
-    return hashlib.sha256(raw_payload.encode('utf-8')).hexdigest()
-
-def execute_concurrency_safe_allocation(evacuee_id: int, shelter_id: int, 
-                                        beds: int = 1, o2: int = 0, food: int = 0, transport: int = 0) -> Dict[str, Any]:
-    """
-    DBMS Concurrency-Safe Transaction:
-    Uses explicit exclusive transaction locking (`BEGIN IMMEDIATE`) and row checks
-    to strictly prevent race conditions and overbooking.
-    """
-    conn = get_db_connection()
+@contextmanager
+def write_txn():
+    """Exclusive write transaction. Records how long we waited for the lock (telemetry)."""
+    conn = get_conn()
+    t0 = time.perf_counter()
+    conn.execute("BEGIN IMMEDIATE")
+    telemetry.record_lock_wait((time.perf_counter() - t0) * 1000)
     try:
-        # Step 1: Explicit Pessimistic Lock (BEGIN IMMEDIATE reserves DB write lock)
-        conn.execute("BEGIN IMMEDIATE;")
-        
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT shelter_id, name, available_beds, oxygen_cylinders, food_units, transport_units 
-            FROM shelters WHERE shelter_id = ?
-        """, (shelter_id,))
-        shelter = cursor.fetchone()
-        
-        if not shelter:
-            conn.rollback()
-            return {"success": False, "error": f"Shelter ID {shelter_id} not found."}
-            
-        if shelter["available_beds"] < beds:
-            conn.rollback()
-            return {"success": False, "error": f"Insufficient beds at {shelter['name']}. Requested: {beds}, Available: {shelter['available_beds']}."}
-            
-        if shelter["oxygen_cylinders"] < o2:
-            conn.rollback()
-            return {"success": False, "error": f"Insufficient oxygen cylinders at {shelter['name']}."}
+        yield conn
+        conn.execute("COMMIT")
+    except BaseException:
+        conn.execute("ROLLBACK")
+        raise
 
-        # Step 2: Atomic State Update
-        new_beds = shelter["available_beds"] - beds
-        new_o2 = shelter["oxygen_cylinders"] - o2
-        new_food = shelter["food_units"] - food
-        new_trans = shelter["transport_units"] - transport
-        
-        cursor.execute("""
-            UPDATE shelters 
-            SET available_beds = ?, oxygen_cylinders = ?, food_units = ?, transport_units = ?, version = version + 1
-            WHERE shelter_id = ?
-        """, (new_beds, new_o2, new_food, new_trans, shelter_id))
-        
-        # Step 3: Update Evacuee Status
-        cursor.execute("""
-            UPDATE evacuees 
-            SET assigned_shelter_id = ?, status = 'ALLOCATED'
-            WHERE evacuee_id = ?
-        """, (shelter_id, evacuee_id))
-        
-        # Step 4: Record Cryptographic Allocation Log
-        tx_hash = generate_transaction_hash(evacuee_id, shelter_id, beds)
-        cursor.execute("""
-            INSERT INTO allocations (evacuee_id, shelter_id, allocated_beds, allocated_oxygen, allocated_food, allocated_transport, transaction_hash)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (evacuee_id, shelter_id, beds, o2, food, transport, tx_hash))
-        
-        conn.commit()
-        return {
-            "success": True,
-            "shelter_name": shelter["name"],
-            "remaining_beds": new_beds,
-            "transaction_hash": tx_hash
-        }
-    except Exception as e:
-        conn.rollback()
-        return {"success": False, "error": str(e)}
-    finally:
-        conn.close()
+
+def rows(sql, params=()):
+    return [dict(r) for r in get_conn().execute(sql, params).fetchall()]
+
+
+def one(sql, params=()):
+    r = get_conn().execute(sql, params).fetchone()
+    return dict(r) if r else None

@@ -1,0 +1,373 @@
+shelter_id,shelter_name,facility_type,district_id,latitude,longitude,total_beds,occupied_at_start,has_icu,has_medical_unit,wheelchair_accessible,contact_helpline,status
+1,Barpeta Indoor Stadium #1,Indoor Stadium,1,26.30778,91.01668,1336,894,YES,YES,YES,+91-00000-00001,OPEN
+2,Barpeta Community Hall #2,Community Hall,1,26.28287,90.89028,290,162,NO,YES,YES,+91-00000-00002,OPEN
+3,Barpeta Indoor Stadium #3,Indoor Stadium,1,26.32134,90.84616,972,451,NO,YES,YES,+91-00000-00003,OPEN
+4,Barpeta Indoor Stadium #4,Indoor Stadium,1,26.30593,90.86173,1364,564,NO,NO,YES,+91-00000-00004,OPEN
+5,Barpeta Community Health Centre #5,Community Health Centre,1,26.27481,91.05668,106,91,NO,YES,YES,+91-00000-00005,OPEN
+6,Barpeta Indoor Stadium #6,Indoor Stadium,1,26.21364,90.91016,1073,841,NO,NO,NO,+91-00000-00006,OPEN
+7,Cachar Govt Higher Secondary School #1,Govt Higher Secondary School,2,24.6633,92.84424,166,151,NO,NO,YES,+91-00000-00007,OPEN
+8,Cachar Army Relief Camp #2,Army Relief Camp,2,24.75595,92.90382,1085,930,NO,YES,YES,+91-00000-00008,OPEN
+9,Cachar Indoor Stadium #3,Indoor Stadium,2,24.71355,92.76213,963,883,NO,YES,YES,+91-00000-00009,OPEN
+10,Cachar Degree College #4,Degree College,2,24.79507,92.65231,430,369,NO,YES,NO,+91-00000-00010,OPEN
+11,Cachar Indoor Stadium #5,Indoor Stadium,2,24.81891,92.77273,1184,847,NO,YES,NO,+91-00000-00011,OPEN
+12,Cachar Army Relief Camp #6,Army Relief Camp,2,24.89477,92.90166,434,333,NO,YES,NO,+91-00000-00012,OPEN
+13,Dhemaji Degree College #1,Degree College,3,27.59302,94.42729,466,205,NO,YES,NO,+91-00000-00013,OPEN
+14,Dhemaji Indoor Stadium #2,Indoor Stadium,3,27.46015,94.64712,1199,856,NO,YES,NO,+91-00000-00014,OPEN
+15,Dhemaji Community Hall #3,Community Hall,3,27.50839,94.72681,253,191,NO,NO,YES,+91-00000-00015,OPEN
+16,Dhemaji Community Hall #4,Community Hall,3,27.37449,94.70321,322,151,NO,YES,NO,+91-00000-00016,OPEN
+17,Dhemaji Community Hall #5,Community Hall,3,27.52756,94.56074,169,99,NO,NO,YES,+91-00000-00017,OPEN
+18,Dhemaji Indoor Stadium #6,Indoor Stadium,3,27.32606,94.63244,1031,875,NO,YES,NO,+91-00000-00018,OPEN
+19,Dhubri Community Hall #1,Community Hall,4,25.98439,90.13931,239,141,NO,NO,YES,+91-00000-00019,OPEN
+20,Dhubri Govt Higher Secondary School #2,Govt Higher Secondary School,4,26.15242,90.01349,467,262,NO,NO,YES,+91-00000-00020,OPEN
+21,Dhubri Govt Higher Secondary School #3,Govt Higher Secondary School,4,25.86538,89.94981,373,187,NO,NO,NO,+91-00000-00021,OPEN
+22,Dhubri Indoor Stadium #4,Indoor Stadium,4,26.04381,89.93727,1454,1299,NO,YES,YES,+91-00000-00022,OPEN
+23,Dhubri Indoor Stadium #5,Indoor Stadium,4,26.0099,90.12978,625,544,YES,YES,YES,+91-00000-00023,OPEN
+24,Dhubri Indoor Stadium #6,Indoor Stadium,4,25.89666,90.12326,1122,872,NO,YES,NO,+91-00000-00024,OPEN
+25,Kamrup Metropolitan Govt Higher Secondary School #1,Govt Higher Secondary School,5,26.03748,91.72347,373,306,NO,YES,NO,+91-00000-00025,OPEN
+26,Kamrup Metropolitan Army Relief Camp #2,Army Relief Camp,5,26.13923,91.78755,650,317,YES,YES,YES,+91-00000-00026,OPEN
+27,Kamrup Metropolitan Govt Higher Secondary School #3,Govt Higher Secondary School,5,26.25142,91.74835,367,231,NO,NO,YES,+91-00000-00027,OPEN
+28,Kamrup Metropolitan Community Health Centre #4,Community Health Centre,5,26.21282,91.80076,218,90,NO,YES,YES,+91-00000-00028,OPEN
+29,Kamrup Metropolitan Community Health Centre #5,Community Health Centre,5,26.15805,91.82258,231,202,YES,YES,YES,+91-00000-00029,OPEN
+30,Kamrup Metropolitan Govt Higher Secondary School #6,Govt Higher Secondary School,5,26.1718,91.83234,486,253,NO,NO,NO,+91-00000-00030,OPEN
+31,Morigaon Degree College #1,Degree College,6,26.31253,92.28298,487,365,NO,YES,YES,+91-00000-00031,OPEN
+32,Morigaon Community Health Centre #2,Community Health Centre,6,26.19781,92.5208,185,156,YES,YES,YES,+91-00000-00032,OPEN
+33,Morigaon Indoor Stadium #3,Indoor Stadium,6,26.34012,92.47693,881,790,NO,YES,YES,+91-00000-00033,OPEN
+34,Morigaon Community Hall #4,Community Hall,6,26.11195,92.2447,197,183,NO,NO,YES,+91-00000-00034,OPEN
+35,Morigaon Indoor Stadium #5,Indoor Stadium,6,26.20343,92.41045,542,304,NO,YES,YES,+91-00000-00035,OPEN
+36,Morigaon Army Relief Camp #6,Army Relief Camp,6,26.15632,92.48788,963,903,NO,YES,NO,+91-00000-00036,OPEN
+37,Nagaon Army Relief Camp #1,Army Relief Camp,7,26.33404,92.49145,448,396,YES,YES,NO,+91-00000-00037,OPEN
+38,Nagaon Army Relief Camp #2,Army Relief Camp,7,26.40212,92.64977,457,209,NO,YES,NO,+91-00000-00038,OPEN
+39,Nagaon Indoor Stadium #3,Indoor Stadium,7,26.23573,92.7487,985,764,NO,YES,YES,+91-00000-00039,OPEN
+40,Nagaon Community Hall #4,Community Hall,7,26.42633,92.6366,299,202,NO,NO,YES,+91-00000-00040,OPEN
+41,Nagaon Degree College #5,Degree College,7,26.17747,92.69069,612,362,NO,NO,NO,+91-00000-00041,OPEN
+42,Nagaon Community Health Centre #6,Community Health Centre,7,26.26996,92.73331,225,129,NO,YES,YES,+91-00000-00042,OPEN
+43,Darbhanga Degree College #1,Degree College,8,26.21091,85.88099,369,240,NO,NO,YES,+91-00000-00043,OPEN
+44,Darbhanga Community Hall #2,Community Hall,8,26.03595,85.83845,186,139,NO,NO,NO,+91-00000-00044,OPEN
+45,Darbhanga Community Health Centre #3,Community Health Centre,8,26.25084,85.95906,164,89,YES,YES,YES,+91-00000-00045,OPEN
+46,Darbhanga Community Hall #4,Community Hall,8,26.18427,85.90731,317,147,NO,NO,NO,+91-00000-00046,OPEN
+47,Darbhanga Community Hall #5,Community Hall,8,26.10264,85.88004,231,160,NO,NO,YES,+91-00000-00047,OPEN
+48,Darbhanga Community Hall #6,Community Hall,8,26.10868,85.79827,152,120,NO,YES,NO,+91-00000-00048,OPEN
+49,Kishanganj Govt Higher Secondary School #1,Govt Higher Secondary School,9,26.06987,88.04049,244,160,NO,NO,NO,+91-00000-00049,OPEN
+50,Kishanganj Indoor Stadium #2,Indoor Stadium,9,26.10217,87.91163,1000,411,NO,NO,NO,+91-00000-00050,OPEN
+51,Kishanganj Army Relief Camp #3,Army Relief Camp,9,25.97385,88.01072,1162,1016,NO,YES,NO,+91-00000-00051,OPEN
+52,Kishanganj Community Hall #4,Community Hall,9,26.216,87.88408,257,147,NO,NO,YES,+91-00000-00052,OPEN
+53,Kishanganj Indoor Stadium #5,Indoor Stadium,9,26.18729,87.84273,1487,681,NO,NO,YES,+91-00000-00053,OPEN
+54,Kishanganj Community Hall #6,Community Hall,9,26.03662,88.00937,230,190,NO,YES,NO,+91-00000-00054,OPEN
+55,Muzaffarpur Army Relief Camp #1,Army Relief Camp,10,25.98527,85.34622,930,450,NO,YES,YES,+91-00000-00055,OPEN
+56,Muzaffarpur Indoor Stadium #2,Indoor Stadium,10,26.10455,85.46286,1308,1021,NO,NO,YES,+91-00000-00056,OPEN
+57,Muzaffarpur Community Health Centre #3,Community Health Centre,10,26.04561,85.52497,119,110,YES,YES,YES,+91-00000-00057,OPEN
+58,Muzaffarpur Degree College #4,Degree College,10,26.12172,85.43023,660,298,NO,NO,YES,+91-00000-00058,OPEN
+59,Muzaffarpur Degree College #5,Degree College,10,26.16779,85.27086,457,392,NO,NO,YES,+91-00000-00059,OPEN
+60,Muzaffarpur Army Relief Camp #6,Army Relief Camp,10,25.95989,85.33824,1191,1110,NO,YES,NO,+91-00000-00060,OPEN
+61,Patna Community Health Centre #1,Community Health Centre,11,25.54065,85.1277,130,96,YES,YES,YES,+91-00000-00061,OPEN
+62,Patna Govt Higher Secondary School #2,Govt Higher Secondary School,11,25.42304,85.18685,430,239,NO,NO,YES,+91-00000-00062,OPEN
+63,Patna Indoor Stadium #3,Indoor Stadium,11,25.65736,85.15299,999,596,NO,YES,YES,+91-00000-00063,OPEN
+64,Patna Indoor Stadium #4,Indoor Stadium,11,25.69077,85.0631,1273,1087,NO,YES,YES,+91-00000-00064,OPEN
+65,Patna Army Relief Camp #5,Army Relief Camp,11,25.52189,84.9636,342,209,YES,YES,NO,+91-00000-00065,OPEN
+66,Patna Degree College #6,Degree College,11,25.68821,85.2015,659,575,NO,YES,YES,+91-00000-00066,OPEN
+67,Saharsa Govt Higher Secondary School #1,Govt Higher Secondary School,12,25.99111,86.53974,321,286,NO,NO,NO,+91-00000-00067,OPEN
+68,Saharsa Community Hall #2,Community Hall,12,25.76151,86.61562,110,79,NO,NO,NO,+91-00000-00068,OPEN
+69,Saharsa Community Hall #3,Community Hall,12,25.94738,86.60422,286,196,NO,NO,YES,+91-00000-00069,OPEN
+70,Saharsa Army Relief Camp #4,Army Relief Camp,12,25.987,86.62517,470,207,NO,YES,YES,+91-00000-00070,OPEN
+71,Saharsa Community Hall #5,Community Hall,12,25.95965,86.59293,349,293,YES,YES,NO,+91-00000-00071,OPEN
+72,Saharsa Degree College #6,Degree College,12,25.80016,86.72116,561,394,NO,NO,YES,+91-00000-00072,OPEN
+73,Supaul Community Health Centre #1,Community Health Centre,13,25.97634,86.48442,88,82,NO,YES,YES,+91-00000-00073,OPEN
+74,Supaul Indoor Stadium #2,Indoor Stadium,13,26.05958,86.67692,1132,905,NO,YES,YES,+91-00000-00074,OPEN
+75,Supaul Govt Higher Secondary School #3,Govt Higher Secondary School,13,26.24259,86.60662,427,174,NO,NO,YES,+91-00000-00075,OPEN
+76,Supaul Degree College #4,Degree College,13,26.21224,86.45892,321,302,NO,YES,NO,+91-00000-00076,OPEN
+77,Supaul Army Relief Camp #5,Army Relief Camp,13,26.0016,86.72472,1183,570,NO,YES,NO,+91-00000-00077,OPEN
+78,Supaul Community Hall #6,Community Hall,13,26.07252,86.48142,122,83,NO,NO,YES,+91-00000-00078,OPEN
+79,Bharuch Degree College #1,Degree College,14,21.62139,73.02825,259,200,NO,YES,YES,+91-00000-00079,OPEN
+80,Bharuch Indoor Stadium #2,Indoor Stadium,14,21.84824,72.98687,1442,950,NO,NO,NO,+91-00000-00080,OPEN
+81,Bharuch Govt Higher Secondary School #3,Govt Higher Secondary School,14,21.76506,73.07049,184,99,NO,NO,YES,+91-00000-00081,OPEN
+82,Bharuch Govt Higher Secondary School #4,Govt Higher Secondary School,14,21.76679,73.14599,377,164,NO,YES,YES,+91-00000-00082,OPEN
+83,Bharuch Indoor Stadium #5,Indoor Stadium,14,21.80048,73.02081,956,470,NO,YES,YES,+91-00000-00083,OPEN
+84,Bharuch Community Health Centre #6,Community Health Centre,14,21.8434,73.05365,183,153,YES,YES,YES,+91-00000-00084,OPEN
+85,Jamnagar Degree College #1,Degree College,15,22.56167,70.16306,515,280,NO,NO,NO,+91-00000-00085,OPEN
+86,Jamnagar Govt Higher Secondary School #2,Govt Higher Secondary School,15,22.32455,70.14635,468,219,NO,NO,NO,+91-00000-00086,OPEN
+87,Jamnagar Indoor Stadium #3,Indoor Stadium,15,22.58869,70.13864,1255,707,YES,YES,YES,+91-00000-00087,OPEN
+88,Jamnagar Indoor Stadium #4,Indoor Stadium,15,22.35834,70.1281,1320,782,NO,NO,YES,+91-00000-00088,OPEN
+89,Jamnagar Community Hall #5,Community Hall,15,22.64505,70.06714,259,186,NO,NO,YES,+91-00000-00089,OPEN
+90,Jamnagar Degree College #6,Degree College,15,22.53414,70.22165,451,227,NO,NO,YES,+91-00000-00090,OPEN
+91,Junagadh Govt Higher Secondary School #1,Govt Higher Secondary School,16,21.39201,70.32457,384,241,NO,NO,YES,+91-00000-00091,OPEN
+92,Junagadh Community Health Centre #2,Community Health Centre,16,21.42902,70.3828,118,100,YES,YES,YES,+91-00000-00092,OPEN
+93,Junagadh Govt Higher Secondary School #3,Govt Higher Secondary School,16,21.43138,70.62303,327,295,NO,NO,NO,+91-00000-00093,OPEN
+94,Junagadh Community Hall #4,Community Hall,16,21.56018,70.33034,208,123,NO,YES,YES,+91-00000-00094,OPEN
+95,Junagadh Indoor Stadium #5,Indoor Stadium,16,21.50204,70.52095,1229,499,NO,YES,YES,+91-00000-00095,OPEN
+96,Junagadh Govt Higher Secondary School #6,Govt Higher Secondary School,16,21.43401,70.37721,265,190,NO,NO,NO,+91-00000-00096,OPEN
+97,Kutch Indoor Stadium #1,Indoor Stadium,17,23.28735,69.59707,739,309,NO,YES,YES,+91-00000-00097,OPEN
+98,Kutch Degree College #2,Degree College,17,23.34331,69.5883,562,384,NO,NO,NO,+91-00000-00098,OPEN
+99,Kutch Govt Higher Secondary School #3,Govt Higher Secondary School,17,23.20165,69.76731,251,188,NO,NO,NO,+91-00000-00099,OPEN
+100,Kutch Community Hall #4,Community Hall,17,23.31908,69.50868,272,210,NO,NO,NO,+91-00000-00100,OPEN
+101,Kutch Community Hall #5,Community Hall,17,23.34608,69.5833,288,189,NO,NO,NO,+91-00000-00101,OPEN
+102,Kutch Govt Higher Secondary School #6,Govt Higher Secondary School,17,23.19286,69.77439,209,193,NO,NO,YES,+91-00000-00102,OPEN
+103,Morbi Degree College #1,Degree College,18,22.77639,70.6543,225,102,NO,NO,NO,+91-00000-00103,OPEN
+104,Morbi Govt Higher Secondary School #2,Govt Higher Secondary School,18,22.84852,70.87995,364,304,NO,NO,NO,+91-00000-00104,OPEN
+105,Morbi Army Relief Camp #3,Army Relief Camp,18,22.97388,70.80039,1053,955,YES,YES,NO,+91-00000-00105,OPEN
+106,Morbi Indoor Stadium #4,Indoor Stadium,18,22.7381,70.72778,653,518,NO,NO,YES,+91-00000-00106,OPEN
+107,Morbi Community Health Centre #5,Community Health Centre,18,22.81487,70.841,242,109,YES,YES,YES,+91-00000-00107,OPEN
+108,Morbi Degree College #6,Degree College,18,22.75599,70.92034,364,184,NO,NO,YES,+91-00000-00108,OPEN
+109,Surat Indoor Stadium #1,Indoor Stadium,19,21.24112,72.87852,1090,491,NO,YES,YES,+91-00000-00109,OPEN
+110,Surat Army Relief Camp #2,Army Relief Camp,19,21.23993,72.85743,656,353,NO,YES,YES,+91-00000-00110,OPEN
+111,Surat Degree College #3,Degree College,19,21.27828,72.93198,680,643,NO,YES,NO,+91-00000-00111,OPEN
+112,Surat Degree College #4,Degree College,19,21.20125,72.84216,568,310,NO,NO,YES,+91-00000-00112,OPEN
+113,Surat Indoor Stadium #5,Indoor Stadium,19,21.29185,72.8583,1490,703,NO,YES,NO,+91-00000-00113,OPEN
+114,Surat Govt Higher Secondary School #6,Govt Higher Secondary School,19,21.16813,72.85047,253,129,NO,NO,NO,+91-00000-00114,OPEN
+115,Chamba Community Hall #1,Community Hall,20,32.58939,76.09237,274,211,NO,NO,NO,+91-00000-00115,OPEN
+116,Chamba Community Health Centre #2,Community Health Centre,20,32.53315,76.05535,246,132,YES,YES,YES,+91-00000-00116,OPEN
+117,Chamba Community Health Centre #3,Community Health Centre,20,32.52106,76.20714,245,105,NO,YES,YES,+91-00000-00117,OPEN
+118,Chamba Govt Higher Secondary School #4,Govt Higher Secondary School,20,32.63548,76.1118,285,147,NO,NO,NO,+91-00000-00118,OPEN
+119,Chamba Community Hall #5,Community Hall,20,32.62765,76.21407,189,96,NO,NO,NO,+91-00000-00119,OPEN
+120,Chamba Community Hall #6,Community Hall,20,32.57273,76.10273,310,186,NO,NO,YES,+91-00000-00120,OPEN
+121,Kinnaur Community Hall #1,Community Hall,21,31.50562,78.31706,167,134,NO,NO,NO,+91-00000-00121,OPEN
+122,Kinnaur Indoor Stadium #2,Indoor Stadium,21,31.49538,78.26062,691,362,YES,YES,YES,+91-00000-00122,OPEN
+123,Kinnaur Community Health Centre #3,Community Health Centre,21,31.50364,78.32118,154,100,NO,YES,YES,+91-00000-00123,OPEN
+124,Kinnaur Community Hall #4,Community Hall,21,31.55268,78.31119,123,107,NO,NO,YES,+91-00000-00124,OPEN
+125,Kinnaur Indoor Stadium #5,Indoor Stadium,21,31.59046,78.30245,1128,1028,NO,YES,YES,+91-00000-00125,OPEN
+126,Kinnaur Army Relief Camp #6,Army Relief Camp,21,31.54277,78.33539,431,265,YES,YES,YES,+91-00000-00126,OPEN
+127,Kullu Govt Higher Secondary School #1,Govt Higher Secondary School,22,31.89479,77.03437,185,138,NO,YES,YES,+91-00000-00127,OPEN
+128,Kullu Community Hall #2,Community Hall,22,31.96379,77.01186,296,276,NO,NO,YES,+91-00000-00128,OPEN
+129,Kullu Army Relief Camp #3,Army Relief Camp,22,32.01128,77.1973,815,514,NO,YES,NO,+91-00000-00129,OPEN
+130,Kullu Indoor Stadium #4,Indoor Stadium,22,32.00657,77.11161,585,311,YES,YES,YES,+91-00000-00130,OPEN
+131,Kullu Indoor Stadium #5,Indoor Stadium,22,31.88531,77.19891,670,449,NO,NO,YES,+91-00000-00131,OPEN
+132,Kullu Govt Higher Secondary School #6,Govt Higher Secondary School,22,31.95496,77.02565,191,86,NO,YES,YES,+91-00000-00132,OPEN
+133,Lahaul and Spiti Community Hall #1,Community Hall,23,32.65149,77.0589,254,220,NO,NO,YES,+91-00000-00133,OPEN
+134,Lahaul and Spiti Community Hall #2,Community Hall,23,32.55648,76.98797,275,128,NO,NO,NO,+91-00000-00134,OPEN
+135,Lahaul and Spiti Community Hall #3,Community Hall,23,32.66029,76.98441,336,235,NO,NO,YES,+91-00000-00135,OPEN
+136,Lahaul and Spiti Indoor Stadium #4,Indoor Stadium,23,32.64883,77.10109,598,536,NO,YES,YES,+91-00000-00136,OPEN
+137,Lahaul and Spiti Degree College #5,Degree College,23,32.56381,77.15105,336,264,NO,NO,YES,+91-00000-00137,OPEN
+138,Lahaul and Spiti Army Relief Camp #6,Army Relief Camp,23,32.55566,77.01907,1131,832,YES,YES,NO,+91-00000-00138,OPEN
+139,Mandi Degree College #1,Degree College,24,31.74408,76.95433,523,273,NO,NO,YES,+91-00000-00139,OPEN
+140,Mandi Govt Higher Secondary School #2,Govt Higher Secondary School,24,31.70665,76.97386,345,249,NO,NO,NO,+91-00000-00140,OPEN
+141,Mandi Community Hall #3,Community Hall,24,31.65778,76.92989,332,158,NO,NO,NO,+91-00000-00141,OPEN
+142,Mandi Community Hall #4,Community Hall,24,31.68314,77.01126,286,240,NO,NO,NO,+91-00000-00142,OPEN
+143,Mandi Govt Higher Secondary School #5,Govt Higher Secondary School,24,31.70408,76.8917,451,266,NO,YES,YES,+91-00000-00143,OPEN
+144,Mandi Community Hall #6,Community Hall,24,31.80849,76.96395,295,153,NO,NO,YES,+91-00000-00144,OPEN
+145,Shimla Govt Higher Secondary School #1,Govt Higher Secondary School,25,31.06296,77.16468,253,237,NO,NO,YES,+91-00000-00145,OPEN
+146,Shimla Community Health Centre #2,Community Health Centre,25,31.17581,77.21937,201,180,YES,YES,YES,+91-00000-00146,OPEN
+147,Shimla Army Relief Camp #3,Army Relief Camp,25,31.01669,77.10423,675,634,YES,YES,YES,+91-00000-00147,OPEN
+148,Shimla Govt Higher Secondary School #4,Govt Higher Secondary School,25,31.11534,77.17885,171,68,NO,NO,YES,+91-00000-00148,OPEN
+149,Shimla Govt Higher Secondary School #5,Govt Higher Secondary School,25,31.18382,77.16961,193,89,NO,NO,NO,+91-00000-00149,OPEN
+150,Shimla Army Relief Camp #6,Army Relief Camp,25,31.0481,77.11761,436,372,NO,NO,YES,+91-00000-00150,OPEN
+151,Alappuzha Degree College #1,Degree College,26,9.39395,76.46337,289,225,NO,NO,YES,+91-00000-00151,OPEN
+152,Alappuzha Indoor Stadium #2,Indoor Stadium,26,9.5876,76.38783,1230,1062,YES,YES,YES,+91-00000-00152,OPEN
+153,Alappuzha Community Hall #3,Community Hall,26,9.40054,76.45562,168,150,NO,YES,NO,+91-00000-00153,OPEN
+154,Alappuzha Community Hall #4,Community Hall,26,9.53555,76.51153,202,105,NO,NO,YES,+91-00000-00154,OPEN
+155,Alappuzha Govt Higher Secondary School #5,Govt Higher Secondary School,26,9.44777,76.45102,295,125,NO,NO,YES,+91-00000-00155,OPEN
+156,Alappuzha Community Hall #6,Community Hall,26,9.48002,76.41178,337,224,NO,NO,YES,+91-00000-00156,OPEN
+157,Ernakulam Indoor Stadium #1,Indoor Stadium,27,9.86682,76.41873,909,593,NO,YES,YES,+91-00000-00157,OPEN
+158,Ernakulam Community Hall #2,Community Hall,27,10.06014,76.39674,199,144,NO,NO,YES,+91-00000-00158,OPEN
+159,Ernakulam Govt Higher Secondary School #3,Govt Higher Secondary School,27,9.88642,76.4145,405,289,NO,YES,YES,+91-00000-00159,OPEN
+160,Ernakulam Community Hall #4,Community Hall,27,9.85981,76.43578,246,110,NO,NO,YES,+91-00000-00160,OPEN
+161,Ernakulam Community Hall #5,Community Hall,27,10.0725,76.39071,271,236,NO,YES,NO,+91-00000-00161,OPEN
+162,Ernakulam Army Relief Camp #6,Army Relief Camp,27,9.98085,76.37896,833,398,YES,YES,NO,+91-00000-00162,OPEN
+163,Idukki Govt Higher Secondary School #1,Govt Higher Secondary School,28,9.96526,76.83744,389,200,NO,YES,NO,+91-00000-00163,OPEN
+164,Idukki Army Relief Camp #2,Army Relief Camp,28,9.88922,76.9315,462,427,YES,YES,NO,+91-00000-00164,OPEN
+165,Idukki Community Hall #3,Community Hall,28,9.82838,77.01036,134,96,NO,NO,NO,+91-00000-00165,OPEN
+166,Idukki Community Hall #4,Community Hall,28,9.8302,77.10905,280,137,NO,NO,NO,+91-00000-00166,OPEN
+167,Idukki Degree College #5,Degree College,28,9.94106,76.88165,649,269,NO,NO,NO,+91-00000-00167,OPEN
+168,Idukki Degree College #6,Degree College,28,9.95084,76.92091,228,162,NO,YES,YES,+91-00000-00168,OPEN
+169,Kottayam Degree College #1,Degree College,29,9.47441,76.49714,420,240,NO,YES,NO,+91-00000-00169,OPEN
+170,Kottayam Community Hall #2,Community Hall,29,9.44036,76.6148,108,74,NO,NO,YES,+91-00000-00170,OPEN
+171,Kottayam Community Health Centre #3,Community Health Centre,29,9.54392,76.35256,213,199,YES,YES,YES,+91-00000-00171,OPEN
+172,Kottayam Community Health Centre #4,Community Health Centre,29,9.57765,76.34747,87,78,NO,YES,YES,+91-00000-00172,OPEN
+173,Kottayam Govt Higher Secondary School #5,Govt Higher Secondary School,29,9.7365,76.42912,181,162,NO,NO,YES,+91-00000-00173,OPEN
+174,Kottayam Govt Higher Secondary School #6,Govt Higher Secondary School,29,9.49028,76.40991,331,248,NO,NO,NO,+91-00000-00174,OPEN
+175,Kozhikode Community Health Centre #1,Community Health Centre,30,11.20658,75.93899,89,76,NO,YES,YES,+91-00000-00175,OPEN
+176,Kozhikode Degree College #2,Degree College,30,11.19965,75.84062,651,337,NO,YES,YES,+91-00000-00176,OPEN
+177,Kozhikode Community Hall #3,Community Hall,30,11.27622,75.84701,234,127,NO,NO,NO,+91-00000-00177,OPEN
+178,Kozhikode Army Relief Camp #4,Army Relief Camp,30,11.36346,75.86054,346,221,NO,YES,NO,+91-00000-00178,OPEN
+179,Kozhikode Community Hall #5,Community Hall,30,11.37406,75.80649,119,49,NO,NO,YES,+91-00000-00179,OPEN
+180,Kozhikode Govt Higher Secondary School #6,Govt Higher Secondary School,30,11.33628,75.86909,360,267,NO,YES,NO,+91-00000-00180,OPEN
+181,Pathanamthitta Army Relief Camp #1,Army Relief Camp,31,9.28996,76.78542,383,248,NO,YES,YES,+91-00000-00181,OPEN
+182,Pathanamthitta Army Relief Camp #2,Army Relief Camp,31,9.10841,76.73592,311,137,YES,YES,YES,+91-00000-00182,OPEN
+183,Pathanamthitta Army Relief Camp #3,Army Relief Camp,31,9.36702,76.93033,949,520,YES,YES,NO,+91-00000-00183,OPEN
+184,Pathanamthitta Army Relief Camp #4,Army Relief Camp,31,9.30031,76.69003,361,166,NO,YES,YES,+91-00000-00184,OPEN
+185,Pathanamthitta Degree College #5,Degree College,31,9.42018,76.85964,643,552,NO,NO,YES,+91-00000-00185,OPEN
+186,Pathanamthitta Degree College #6,Degree College,31,9.11151,76.84293,545,351,NO,NO,YES,+91-00000-00186,OPEN
+187,Thrissur Army Relief Camp #1,Army Relief Camp,32,10.43099,76.26814,559,374,NO,YES,YES,+91-00000-00187,OPEN
+188,Thrissur Community Hall #2,Community Hall,32,10.50589,76.31907,209,117,YES,YES,NO,+91-00000-00188,OPEN
+189,Thrissur Army Relief Camp #3,Army Relief Camp,32,10.50031,76.24777,1040,565,NO,YES,YES,+91-00000-00189,OPEN
+190,Thrissur Army Relief Camp #4,Army Relief Camp,32,10.65506,76.31672,504,221,NO,YES,YES,+91-00000-00190,OPEN
+191,Thrissur Community Hall #5,Community Hall,32,10.53652,76.33617,187,126,NO,NO,NO,+91-00000-00191,OPEN
+192,Thrissur Govt Higher Secondary School #6,Govt Higher Secondary School,32,10.46072,76.29928,165,82,NO,NO,NO,+91-00000-00192,OPEN
+193,Wayanad Govt Higher Secondary School #1,Govt Higher Secondary School,33,11.59548,76.24048,396,218,NO,YES,YES,+91-00000-00193,OPEN
+194,Wayanad Community Health Centre #2,Community Health Centre,33,11.62396,75.96393,211,177,YES,YES,YES,+91-00000-00194,OPEN
+195,Wayanad Degree College #3,Degree College,33,11.72397,75.97028,270,254,NO,YES,NO,+91-00000-00195,OPEN
+196,Wayanad Community Health Centre #4,Community Health Centre,33,11.44793,76.12706,194,109,YES,YES,YES,+91-00000-00196,OPEN
+197,Wayanad Indoor Stadium #5,Indoor Stadium,33,11.56572,76.24137,1490,1275,NO,NO,YES,+91-00000-00197,OPEN
+198,Wayanad Degree College #6,Degree College,33,11.57741,76.22978,670,561,NO,NO,YES,+91-00000-00198,OPEN
+199,Kolhapur Army Relief Camp #1,Army Relief Camp,34,16.72972,74.06933,691,647,YES,YES,YES,+91-00000-00199,OPEN
+200,Kolhapur Indoor Stadium #2,Indoor Stadium,34,16.55162,74.16866,1410,1250,YES,YES,YES,+91-00000-00200,OPEN
+201,Kolhapur Community Health Centre #3,Community Health Centre,34,16.74862,74.40145,236,186,NO,YES,YES,+91-00000-00201,OPEN
+202,Kolhapur Community Hall #4,Community Hall,34,16.68878,74.07026,105,44,NO,YES,NO,+91-00000-00202,OPEN
+203,Kolhapur Indoor Stadium #5,Indoor Stadium,34,16.54942,74.19111,1389,712,NO,YES,YES,+91-00000-00203,OPEN
+204,Kolhapur Degree College #6,Degree College,34,16.68031,74.07253,404,277,NO,YES,YES,+91-00000-00204,OPEN
+205,Mumbai Army Relief Camp #1,Army Relief Camp,35,19.03912,72.9278,1035,495,NO,YES,YES,+91-00000-00205,OPEN
+206,Mumbai Indoor Stadium #2,Indoor Stadium,35,19.01677,72.97079,790,707,NO,YES,YES,+91-00000-00206,OPEN
+207,Mumbai Community Health Centre #3,Community Health Centre,35,19.03633,73.05959,235,153,NO,YES,YES,+91-00000-00207,OPEN
+208,Mumbai Community Health Centre #4,Community Health Centre,35,19.09899,72.88047,222,133,YES,YES,NO,+91-00000-00208,OPEN
+209,Mumbai Community Hall #5,Community Hall,35,18.91219,72.94313,113,79,NO,NO,NO,+91-00000-00209,OPEN
+210,Mumbai Indoor Stadium #6,Indoor Stadium,35,19.23999,72.9537,744,437,NO,YES,YES,+91-00000-00210,OPEN
+211,Raigad Degree College #1,Degree College,36,18.60834,73.00538,213,137,NO,NO,YES,+91-00000-00211,OPEN
+212,Raigad Degree College #2,Degree College,36,18.49802,72.89266,452,247,NO,YES,YES,+91-00000-00212,OPEN
+213,Raigad Govt Higher Secondary School #3,Govt Higher Secondary School,36,18.62954,72.9796,291,270,NO,YES,YES,+91-00000-00213,OPEN
+214,Raigad Community Health Centre #4,Community Health Centre,36,18.66327,73.05451,171,121,NO,YES,NO,+91-00000-00214,OPEN
+215,Raigad Army Relief Camp #5,Army Relief Camp,36,18.71056,72.91882,1089,792,YES,YES,YES,+91-00000-00215,OPEN
+216,Raigad Govt Higher Secondary School #6,Govt Higher Secondary School,36,18.75487,73.01428,379,176,NO,YES,NO,+91-00000-00216,OPEN
+217,Ratnagiri Army Relief Camp #1,Army Relief Camp,37,16.93246,73.41808,763,629,NO,YES,YES,+91-00000-00217,OPEN
+218,Ratnagiri Indoor Stadium #2,Indoor Stadium,37,16.9069,73.4755,1403,1300,NO,YES,YES,+91-00000-00218,OPEN
+219,Ratnagiri Indoor Stadium #3,Indoor Stadium,37,17.0913,73.33168,773,511,NO,YES,YES,+91-00000-00219,OPEN
+220,Ratnagiri Community Hall #4,Community Hall,37,16.97128,73.38956,344,285,NO,NO,YES,+91-00000-00220,OPEN
+221,Ratnagiri Army Relief Camp #5,Army Relief Camp,37,17.10377,73.36252,1138,487,NO,YES,YES,+91-00000-00221,OPEN
+222,Ratnagiri Degree College #6,Degree College,37,17.01569,73.43791,292,230,NO,NO,YES,+91-00000-00222,OPEN
+223,Sangli Community Health Centre #1,Community Health Centre,38,16.86464,74.45898,101,45,YES,YES,YES,+91-00000-00223,OPEN
+224,Sangli Community Health Centre #2,Community Health Centre,38,16.73054,74.58202,189,88,YES,YES,YES,+91-00000-00224,OPEN
+225,Sangli Community Hall #3,Community Hall,38,16.91004,74.46843,199,151,NO,NO,YES,+91-00000-00225,OPEN
+226,Sangli Army Relief Camp #4,Army Relief Camp,38,16.8163,74.46179,972,810,NO,YES,NO,+91-00000-00226,OPEN
+227,Sangli Community Health Centre #5,Community Health Centre,38,17.00872,74.53803,200,121,NO,YES,YES,+91-00000-00227,OPEN
+228,Sangli Community Hall #6,Community Hall,38,16.7055,74.57245,129,90,NO,NO,YES,+91-00000-00228,OPEN
+229,Thane Indoor Stadium #1,Indoor Stadium,39,19.13755,72.99536,1464,984,NO,YES,NO,+91-00000-00229,OPEN
+230,Thane Degree College #2,Degree College,39,19.33894,72.98409,251,225,NO,YES,YES,+91-00000-00230,OPEN
+231,Thane Community Hall #3,Community Hall,39,19.06004,73.06226,112,89,NO,NO,YES,+91-00000-00231,OPEN
+232,Thane Community Health Centre #4,Community Health Centre,39,19.32177,73.11692,227,111,YES,YES,YES,+91-00000-00232,OPEN
+233,Thane Govt Higher Secondary School #5,Govt Higher Secondary School,39,19.14295,73.07899,488,390,NO,NO,YES,+91-00000-00233,OPEN
+234,Thane Army Relief Camp #6,Army Relief Camp,39,19.39151,72.99384,976,563,NO,YES,YES,+91-00000-00234,OPEN
+235,Balasore Indoor Stadium #1,Indoor Stadium,40,21.52179,86.80883,586,297,NO,YES,YES,+91-00000-00235,OPEN
+236,Balasore Army Relief Camp #2,Army Relief Camp,40,21.44123,86.82184,497,226,NO,YES,NO,+91-00000-00236,OPEN
+237,Balasore Army Relief Camp #3,Army Relief Camp,40,21.33191,86.85608,415,230,YES,YES,YES,+91-00000-00237,OPEN
+238,Balasore Degree College #4,Degree College,40,21.36014,86.86631,644,418,NO,NO,NO,+91-00000-00238,OPEN
+239,Balasore Army Relief Camp #5,Army Relief Camp,40,21.48855,86.87741,384,162,YES,YES,NO,+91-00000-00239,OPEN
+240,Balasore Govt Higher Secondary School #6,Govt Higher Secondary School,40,21.36713,86.79819,370,249,NO,YES,YES,+91-00000-00240,OPEN
+241,Bhadrak Community Health Centre #1,Community Health Centre,41,20.99066,86.47006,205,121,NO,YES,YES,+91-00000-00241,OPEN
+242,Bhadrak Govt Higher Secondary School #2,Govt Higher Secondary School,41,21.08789,86.41939,284,239,NO,NO,YES,+91-00000-00242,OPEN
+243,Bhadrak Govt Higher Secondary School #3,Govt Higher Secondary School,41,21.06444,86.57398,344,199,NO,NO,YES,+91-00000-00243,OPEN
+244,Bhadrak Degree College #4,Degree College,41,20.91599,86.53538,369,165,NO,YES,YES,+91-00000-00244,OPEN
+245,Bhadrak Indoor Stadium #5,Indoor Stadium,41,20.99392,86.44968,1216,553,NO,YES,YES,+91-00000-00245,OPEN
+246,Bhadrak Indoor Stadium #6,Indoor Stadium,41,20.95542,86.41298,1286,850,NO,YES,YES,+91-00000-00246,OPEN
+247,Ganjam Army Relief Camp #1,Army Relief Camp,42,19.46492,84.69923,636,357,YES,YES,NO,+91-00000-00247,OPEN
+248,Ganjam Degree College #2,Degree College,42,19.33165,84.66078,261,119,NO,YES,NO,+91-00000-00248,OPEN
+249,Ganjam Govt Higher Secondary School #3,Govt Higher Secondary School,42,19.27792,84.7623,463,277,NO,NO,NO,+91-00000-00249,OPEN
+250,Ganjam Community Hall #4,Community Hall,42,19.45293,84.77716,230,105,NO,YES,YES,+91-00000-00250,OPEN
+251,Ganjam Govt Higher Secondary School #5,Govt Higher Secondary School,42,19.13583,84.76178,187,166,NO,NO,NO,+91-00000-00251,OPEN
+252,Ganjam Army Relief Camp #6,Army Relief Camp,42,19.20938,84.68169,940,628,NO,YES,YES,+91-00000-00252,OPEN
+253,Jagatsinghpur Community Health Centre #1,Community Health Centre,43,20.25601,86.07994,231,131,NO,YES,YES,+91-00000-00253,OPEN
+254,Jagatsinghpur Govt Higher Secondary School #2,Govt Higher Secondary School,43,20.17208,86.14029,184,139,NO,NO,YES,+91-00000-00254,OPEN
+255,Jagatsinghpur Community Health Centre #3,Community Health Centre,43,20.36819,86.09242,231,204,YES,YES,YES,+91-00000-00255,OPEN
+256,Jagatsinghpur Indoor Stadium #4,Indoor Stadium,43,20.3461,86.14364,647,446,YES,YES,YES,+91-00000-00256,OPEN
+257,Jagatsinghpur Indoor Stadium #5,Indoor Stadium,43,20.29532,86.04325,601,351,NO,YES,YES,+91-00000-00257,OPEN
+258,Jagatsinghpur Govt Higher Secondary School #6,Govt Higher Secondary School,43,20.40924,86.09084,207,108,NO,YES,NO,+91-00000-00258,OPEN
+259,Kendrapara Indoor Stadium #1,Indoor Stadium,44,20.60382,86.26287,1206,546,NO,YES,YES,+91-00000-00259,OPEN
+260,Kendrapara Community Health Centre #2,Community Health Centre,44,20.43147,86.34833,161,69,NO,YES,YES,+91-00000-00260,OPEN
+261,Kendrapara Govt Higher Secondary School #3,Govt Higher Secondary School,44,20.35296,86.39009,250,158,NO,YES,NO,+91-00000-00261,OPEN
+262,Kendrapara Army Relief Camp #4,Army Relief Camp,44,20.36664,86.30419,637,524,NO,YES,YES,+91-00000-00262,OPEN
+263,Kendrapara Community Health Centre #5,Community Health Centre,44,20.35976,86.373,171,122,NO,YES,YES,+91-00000-00263,OPEN
+264,Kendrapara Degree College #6,Degree College,44,20.52543,86.28688,672,637,NO,NO,NO,+91-00000-00264,OPEN
+265,Puri Community Health Centre #1,Community Health Centre,45,19.9668,85.82759,91,83,NO,YES,YES,+91-00000-00265,OPEN
+266,Puri Indoor Stadium #2,Indoor Stadium,45,19.98388,85.8056,543,455,NO,YES,YES,+91-00000-00266,OPEN
+267,Puri Army Relief Camp #3,Army Relief Camp,45,19.87865,85.68723,713,358,YES,YES,YES,+91-00000-00267,OPEN
+268,Puri Degree College #4,Degree College,45,19.92052,85.75532,650,567,NO,NO,NO,+91-00000-00268,OPEN
+269,Puri Degree College #5,Degree College,45,19.66573,85.7473,347,234,NO,YES,NO,+91-00000-00269,OPEN
+270,Puri Govt Higher Secondary School #6,Govt Higher Secondary School,45,19.90458,85.71325,341,222,NO,NO,NO,+91-00000-00270,OPEN
+271,Chennai Indoor Stadium #1,Indoor Stadium,46,13.19776,80.24912,1442,1092,YES,YES,YES,+91-00000-00271,OPEN
+272,Chennai Community Hall #2,Community Hall,46,13.05821,80.09134,179,152,NO,YES,NO,+91-00000-00272,OPEN
+273,Chennai Indoor Stadium #3,Indoor Stadium,46,12.93222,80.24841,900,485,YES,YES,YES,+91-00000-00273,OPEN
+274,Chennai Community Health Centre #4,Community Health Centre,46,13.22791,80.25626,235,156,YES,YES,YES,+91-00000-00274,OPEN
+275,Chennai Indoor Stadium #5,Indoor Stadium,46,13.17085,80.18038,1137,858,NO,YES,NO,+91-00000-00275,OPEN
+276,Chennai Degree College #6,Degree College,46,13.24805,80.20921,509,404,NO,NO,YES,+91-00000-00276,OPEN
+277,Cuddalore Govt Higher Secondary School #1,Govt Higher Secondary School,47,11.73255,79.62871,464,188,NO,NO,YES,+91-00000-00277,OPEN
+278,Cuddalore Govt Higher Secondary School #2,Govt Higher Secondary School,47,11.58268,79.72203,360,163,NO,YES,YES,+91-00000-00278,OPEN
+279,Cuddalore Community Health Centre #3,Community Health Centre,47,11.57354,79.7254,226,142,YES,YES,NO,+91-00000-00279,OPEN
+280,Cuddalore Army Relief Camp #4,Army Relief Camp,47,11.82318,79.69123,631,328,NO,YES,NO,+91-00000-00280,OPEN
+281,Cuddalore Indoor Stadium #5,Indoor Stadium,47,11.57906,79.72635,1036,823,NO,NO,YES,+91-00000-00281,OPEN
+282,Cuddalore Community Health Centre #6,Community Health Centre,47,11.84069,79.61428,159,98,NO,YES,YES,+91-00000-00282,OPEN
+283,Kanchipuram Govt Higher Secondary School #1,Govt Higher Secondary School,48,12.9557,79.64791,387,231,NO,NO,YES,+91-00000-00283,OPEN
+284,Kanchipuram Army Relief Camp #2,Army Relief Camp,48,12.84374,79.67091,1047,573,YES,YES,NO,+91-00000-00284,OPEN
+285,Kanchipuram Indoor Stadium #3,Indoor Stadium,48,12.70732,79.71283,1082,588,YES,YES,NO,+91-00000-00285,OPEN
+286,Kanchipuram Indoor Stadium #4,Indoor Stadium,48,12.83605,79.71959,590,394,YES,YES,YES,+91-00000-00286,OPEN
+287,Kanchipuram Govt Higher Secondary School #5,Govt Higher Secondary School,48,12.82017,79.53334,449,235,NO,NO,NO,+91-00000-00287,OPEN
+288,Kanchipuram Community Health Centre #6,Community Health Centre,48,12.83397,79.78801,104,61,YES,YES,YES,+91-00000-00288,OPEN
+289,Nagapattinam Community Health Centre #1,Community Health Centre,49,10.85729,79.78682,152,109,YES,YES,YES,+91-00000-00289,OPEN
+290,Nagapattinam Community Hall #2,Community Hall,49,10.88534,79.73362,346,158,NO,YES,NO,+91-00000-00290,OPEN
+291,Nagapattinam Army Relief Camp #3,Army Relief Camp,49,10.79593,79.67756,684,482,NO,YES,NO,+91-00000-00291,OPEN
+292,Nagapattinam Army Relief Camp #4,Army Relief Camp,49,10.65214,79.83293,1169,484,YES,YES,YES,+91-00000-00292,OPEN
+293,Nagapattinam Army Relief Camp #5,Army Relief Camp,49,10.79072,79.82327,800,501,NO,YES,NO,+91-00000-00293,OPEN
+294,Nagapattinam Community Health Centre #6,Community Health Centre,49,10.87042,79.80581,180,96,YES,YES,YES,+91-00000-00294,OPEN
+295,Thanjavur Army Relief Camp #1,Army Relief Camp,50,10.95998,79.11789,417,259,NO,YES,NO,+91-00000-00295,OPEN
+296,Thanjavur Indoor Stadium #2,Indoor Stadium,50,10.77287,79.29707,1424,711,NO,YES,YES,+91-00000-00296,OPEN
+297,Thanjavur Indoor Stadium #3,Indoor Stadium,50,10.707,79.01074,749,387,NO,NO,NO,+91-00000-00297,OPEN
+298,Thanjavur Degree College #4,Degree College,50,10.72994,79.20475,336,166,NO,NO,NO,+91-00000-00298,OPEN
+299,Thanjavur Degree College #5,Degree College,50,10.63166,79.22519,634,493,NO,NO,YES,+91-00000-00299,OPEN
+300,Thanjavur Degree College #6,Degree College,50,10.82535,79.29184,535,358,NO,YES,YES,+91-00000-00300,OPEN
+301,Tiruvallur Govt Higher Secondary School #1,Govt Higher Secondary School,51,13.09365,80.04117,403,212,NO,NO,YES,+91-00000-00301,OPEN
+302,Tiruvallur Army Relief Camp #2,Army Relief Camp,51,13.30542,79.8957,349,263,NO,YES,NO,+91-00000-00302,OPEN
+303,Tiruvallur Indoor Stadium #3,Indoor Stadium,51,13.13459,79.92,1105,569,NO,YES,YES,+91-00000-00303,OPEN
+304,Tiruvallur Indoor Stadium #4,Indoor Stadium,51,13.07972,79.84741,567,394,NO,YES,YES,+91-00000-00304,OPEN
+305,Tiruvallur Community Hall #5,Community Hall,51,13.15285,79.79,272,122,NO,NO,YES,+91-00000-00305,OPEN
+306,Tiruvallur Govt Higher Secondary School #6,Govt Higher Secondary School,51,13.14716,79.79697,236,101,NO,NO,YES,+91-00000-00306,OPEN
+307,Chamoli Indoor Stadium #1,Indoor Stadium,52,30.38979,79.42732,1359,798,YES,YES,NO,+91-00000-00307,OPEN
+308,Chamoli Govt Higher Secondary School #2,Govt Higher Secondary School,52,30.30812,79.31103,482,400,NO,NO,NO,+91-00000-00308,OPEN
+309,Chamoli Indoor Stadium #3,Indoor Stadium,52,30.41606,79.31958,821,660,NO,YES,YES,+91-00000-00309,OPEN
+310,Chamoli Govt Higher Secondary School #4,Govt Higher Secondary School,52,30.46498,79.398,208,150,NO,NO,YES,+91-00000-00310,OPEN
+311,Chamoli Indoor Stadium #5,Indoor Stadium,52,30.38862,79.41817,1302,900,NO,YES,YES,+91-00000-00311,OPEN
+312,Chamoli Community Hall #6,Community Hall,52,30.35298,79.35898,221,109,NO,NO,NO,+91-00000-00312,OPEN
+313,Dehradun Army Relief Camp #1,Army Relief Camp,53,30.4135,78.05704,866,467,YES,YES,YES,+91-00000-00313,OPEN
+314,Dehradun Degree College #2,Degree College,53,30.26273,77.99921,375,241,NO,NO,YES,+91-00000-00314,OPEN
+315,Dehradun Degree College #3,Degree College,53,30.31525,77.91928,475,271,NO,NO,NO,+91-00000-00315,OPEN
+316,Dehradun Degree College #4,Degree College,53,30.37379,78.02717,206,87,NO,YES,YES,+91-00000-00316,OPEN
+317,Dehradun Community Hall #5,Community Hall,53,30.25468,78.1297,314,232,NO,YES,YES,+91-00000-00317,OPEN
+318,Dehradun Army Relief Camp #6,Army Relief Camp,53,30.26853,78.04471,386,313,NO,YES,NO,+91-00000-00318,OPEN
+319,Nainital Govt Higher Secondary School #1,Govt Higher Secondary School,54,29.41107,79.46699,478,217,NO,YES,YES,+91-00000-00319,OPEN
+320,Nainital Indoor Stadium #2,Indoor Stadium,54,29.36179,79.3762,1243,794,NO,YES,YES,+91-00000-00320,OPEN
+321,Nainital Army Relief Camp #3,Army Relief Camp,54,29.33811,79.44478,1199,673,YES,YES,YES,+91-00000-00321,OPEN
+322,Nainital Govt Higher Secondary School #4,Govt Higher Secondary School,54,29.38007,79.57424,154,69,NO,NO,NO,+91-00000-00322,OPEN
+323,Nainital Degree College #5,Degree College,54,29.32147,79.54307,527,346,NO,YES,YES,+91-00000-00323,OPEN
+324,Nainital Degree College #6,Degree College,54,29.4033,79.37133,562,421,NO,NO,NO,+91-00000-00324,OPEN
+325,Pithoragarh Community Health Centre #1,Community Health Centre,55,29.58869,80.28834,99,86,YES,YES,NO,+91-00000-00325,OPEN
+326,Pithoragarh Indoor Stadium #2,Indoor Stadium,55,29.61537,80.16862,1008,779,NO,YES,YES,+91-00000-00326,OPEN
+327,Pithoragarh Army Relief Camp #3,Army Relief Camp,55,29.62268,80.23471,873,727,YES,YES,YES,+91-00000-00327,OPEN
+328,Pithoragarh Degree College #4,Degree College,55,29.64907,80.20466,609,572,NO,YES,YES,+91-00000-00328,OPEN
+329,Pithoragarh Degree College #5,Degree College,55,29.62104,80.2701,226,185,NO,NO,YES,+91-00000-00329,OPEN
+330,Pithoragarh Degree College #6,Degree College,55,29.57504,80.25082,207,126,NO,YES,NO,+91-00000-00330,OPEN
+331,Rudraprayag Community Hall #1,Community Hall,56,30.19029,78.94722,295,187,NO,YES,NO,+91-00000-00331,OPEN
+332,Rudraprayag Community Health Centre #2,Community Health Centre,56,30.37301,79.01497,244,139,NO,YES,YES,+91-00000-00332,OPEN
+333,Rudraprayag Degree College #3,Degree College,56,30.29755,78.87037,638,421,NO,NO,YES,+91-00000-00333,OPEN
+334,Rudraprayag Community Hall #4,Community Hall,56,30.31081,79.00289,348,163,NO,YES,NO,+91-00000-00334,OPEN
+335,Rudraprayag Army Relief Camp #5,Army Relief Camp,56,30.2762,78.9612,1187,832,YES,YES,YES,+91-00000-00335,OPEN
+336,Rudraprayag Army Relief Camp #6,Army Relief Camp,56,30.37112,78.9502,545,252,NO,YES,YES,+91-00000-00336,OPEN
+337,Uttarkashi Degree College #1,Degree College,57,30.71228,78.39437,328,272,NO,NO,NO,+91-00000-00337,OPEN
+338,Uttarkashi Army Relief Camp #2,Army Relief Camp,57,30.80227,78.40206,558,382,YES,YES,NO,+91-00000-00338,OPEN
+339,Uttarkashi Community Health Centre #3,Community Health Centre,57,30.66378,78.40729,181,84,YES,YES,YES,+91-00000-00339,OPEN
+340,Uttarkashi Indoor Stadium #4,Indoor Stadium,57,30.8184,78.37876,1434,1081,NO,YES,YES,+91-00000-00340,OPEN
+341,Uttarkashi Community Hall #5,Community Hall,57,30.76549,78.56398,165,121,NO,NO,YES,+91-00000-00341,OPEN
+342,Uttarkashi Indoor Stadium #6,Indoor Stadium,57,30.71848,78.38834,618,293,NO,YES,YES,+91-00000-00342,OPEN
+343,Howrah Community Health Centre #1,Community Health Centre,58,22.53602,88.44663,221,198,NO,YES,YES,+91-00000-00343,OPEN
+344,Howrah Community Hall #2,Community Hall,58,22.60723,88.32117,143,105,NO,NO,NO,+91-00000-00344,OPEN
+345,Howrah Army Relief Camp #3,Army Relief Camp,58,22.57493,88.20448,793,340,NO,YES,YES,+91-00000-00345,OPEN
+346,Howrah Indoor Stadium #4,Indoor Stadium,58,22.44045,88.29943,1100,720,NO,YES,NO,+91-00000-00346,OPEN
+347,Howrah Indoor Stadium #5,Indoor Stadium,58,22.67847,88.16234,1408,1115,NO,YES,NO,+91-00000-00347,OPEN
+348,Howrah Govt Higher Secondary School #6,Govt Higher Secondary School,58,22.63505,88.22355,421,293,NO,NO,YES,+91-00000-00348,OPEN
+349,Malda Army Relief Camp #1,Army Relief Camp,59,25.02054,88.28757,567,405,YES,YES,NO,+91-00000-00349,OPEN
+350,Malda Govt Higher Secondary School #2,Govt Higher Secondary School,59,24.92971,88.20169,261,136,NO,NO,NO,+91-00000-00350,OPEN
+351,Malda Community Health Centre #3,Community Health Centre,59,24.85418,88.19081,170,88,YES,YES,NO,+91-00000-00351,OPEN
+352,Malda Govt Higher Secondary School #4,Govt Higher Secondary School,59,24.94056,88.13524,226,116,NO,NO,NO,+91-00000-00352,OPEN
+353,Malda Govt Higher Secondary School #5,Govt Higher Secondary School,59,24.91904,88.1802,473,269,NO,NO,YES,+91-00000-00353,OPEN
+354,Malda Community Hall #6,Community Hall,59,25.07853,88.06445,229,147,NO,NO,YES,+91-00000-00354,OPEN
+355,Murshidabad Indoor Stadium #1,Indoor Stadium,60,24.25277,88.2042,533,297,NO,NO,YES,+91-00000-00355,OPEN
+356,Murshidabad Degree College #2,Degree College,60,24.11512,88.36047,496,373,NO,YES,NO,+91-00000-00356,OPEN
+357,Murshidabad Community Hall #3,Community Hall,60,24.13671,88.42127,185,83,NO,NO,YES,+91-00000-00357,OPEN
+358,Murshidabad Community Health Centre #4,Community Health Centre,60,24.14588,88.16305,249,233,NO,YES,YES,+91-00000-00358,OPEN
+359,Murshidabad Indoor Stadium #5,Indoor Stadium,60,23.99084,88.39735,1067,746,NO,NO,NO,+91-00000-00359,OPEN
+360,Murshidabad Army Relief Camp #6,Army Relief Camp,60,23.98762,88.32427,895,751,YES,YES,NO,+91-00000-00360,OPEN
+361,North 24 Parganas Community Health Centre #1,Community Health Centre,61,22.82538,88.37183,113,75,YES,YES,YES,+91-00000-00361,OPEN
+362,North 24 Parganas Community Health Centre #2,Community Health Centre,61,22.82402,88.59883,205,90,NO,YES,YES,+91-00000-00362,OPEN
+363,North 24 Parganas Community Hall #3,Community Hall,61,22.65593,88.64305,217,113,NO,NO,YES,+91-00000-00363,OPEN
+364,North 24 Parganas Govt Higher Secondary School #4,Govt Higher Secondary School,61,22.7037,88.36602,489,322,NO,NO,NO,+91-00000-00364,OPEN
+365,North 24 Parganas Community Health Centre #5,Community Health Centre,61,22.82546,88.49661,128,66,NO,YES,YES,+91-00000-00365,OPEN
+366,North 24 Parganas Degree College #6,Degree College,61,22.60947,88.41216,590,380,NO,NO,YES,+91-00000-00366,OPEN
+367,South 24 Parganas Community Health Centre #1,Community Health Centre,62,22.65875,88.41521,174,144,YES,YES,YES,+91-00000-00367,OPEN
+368,South 24 Parganas Community Health Centre #2,Community Health Centre,62,22.57673,88.28155,207,89,NO,YES,YES,+91-00000-00368,OPEN
+369,South 24 Parganas Indoor Stadium #3,Indoor Stadium,62,22.62162,88.24548,607,520,NO,YES,YES,+91-00000-00369,OPEN
+370,South 24 Parganas Degree College #4,Degree College,62,22.60443,88.45888,497,398,NO,NO,YES,+91-00000-00370,OPEN
+371,South 24 Parganas Army Relief Camp #5,Army Relief Camp,62,22.67227,88.34383,903,744,YES,YES,YES,+91-00000-00371,OPEN
+372,South 24 Parganas Indoor Stadium #6,Indoor Stadium,62,22.52249,88.37175,1159,737,NO,YES,NO,+91-00000-00372,OPEN

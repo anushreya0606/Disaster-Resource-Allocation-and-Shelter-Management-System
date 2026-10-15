@@ -1,0 +1,63 @@
+district_id,district_name,state,hq_latitude,hq_longitude,coast_side,hilly_terrain
+1,Barpeta,Assam,26.32,91.0,INLAND,NO
+2,Cachar,Assam,24.83,92.78,INLAND,NO
+3,Dhemaji,Assam,27.48,94.58,INLAND,NO
+4,Dhubri,Assam,26.02,89.98,INLAND,NO
+5,Kamrup Metropolitan,Assam,26.14,91.74,INLAND,NO
+6,Morigaon,Assam,26.25,92.34,INLAND,NO
+7,Nagaon,Assam,26.35,92.68,INLAND,NO
+8,Darbhanga,Bihar,26.15,85.9,INLAND,NO
+9,Kishanganj,Bihar,26.1,87.95,INLAND,NO
+10,Muzaffarpur,Bihar,26.12,85.39,INLAND,NO
+11,Patna,Bihar,25.59,85.14,INLAND,NO
+12,Saharsa,Bihar,25.88,86.6,INLAND,NO
+13,Supaul,Bihar,26.12,86.6,INLAND,NO
+14,Bharuch,Gujarat,21.71,72.98,W,NO
+15,Jamnagar,Gujarat,22.47,70.06,W,NO
+16,Junagadh,Gujarat,21.52,70.46,INLAND,NO
+17,Kutch,Gujarat,23.25,69.67,INLAND,NO
+18,Morbi,Gujarat,22.82,70.84,INLAND,NO
+19,Surat,Gujarat,21.17,72.83,W,NO
+20,Chamba,Himachal Pradesh,32.55,76.13,INLAND,YES
+21,Kinnaur,Himachal Pradesh,31.54,78.27,INLAND,YES
+22,Kullu,Himachal Pradesh,31.96,77.11,INLAND,YES
+23,Lahaul and Spiti,Himachal Pradesh,32.57,77.03,INLAND,YES
+24,Mandi,Himachal Pradesh,31.71,76.93,INLAND,YES
+25,Shimla,Himachal Pradesh,31.1,77.17,INLAND,YES
+26,Alappuzha,Kerala,9.5,76.34,W,NO
+27,Ernakulam,Kerala,9.98,76.3,W,NO
+28,Idukki,Kerala,9.85,76.97,INLAND,NO
+29,Kottayam,Kerala,9.59,76.52,INLAND,NO
+30,Kozhikode,Kerala,11.26,75.78,W,NO
+31,Pathanamthitta,Kerala,9.26,76.79,INLAND,NO
+32,Thrissur,Kerala,10.53,76.21,W,NO
+33,Wayanad,Kerala,11.61,76.08,INLAND,NO
+34,Kolhapur,Maharashtra,16.7,74.24,INLAND,NO
+35,Mumbai,Maharashtra,19.08,72.88,W,NO
+36,Raigad,Maharashtra,18.64,72.87,W,NO
+37,Ratnagiri,Maharashtra,16.99,73.31,W,NO
+38,Sangli,Maharashtra,16.85,74.58,INLAND,NO
+39,Thane,Maharashtra,19.22,72.98,W,NO
+40,Balasore,Odisha,21.49,86.93,E,NO
+41,Bhadrak,Odisha,21.06,86.5,INLAND,NO
+42,Ganjam,Odisha,19.31,84.79,E,NO
+43,Jagatsinghpur,Odisha,20.26,86.17,E,NO
+44,Kendrapara,Odisha,20.5,86.42,E,NO
+45,Puri,Odisha,19.81,85.83,E,NO
+46,Chennai,Tamil Nadu,13.08,80.27,E,NO
+47,Cuddalore,Tamil Nadu,11.75,79.75,E,NO
+48,Kanchipuram,Tamil Nadu,12.83,79.7,INLAND,NO
+49,Nagapattinam,Tamil Nadu,10.77,79.84,E,NO
+50,Thanjavur,Tamil Nadu,10.79,79.14,INLAND,NO
+51,Tiruvallur,Tamil Nadu,13.14,79.91,INLAND,NO
+52,Chamoli,Uttarakhand,30.41,79.32,INLAND,YES
+53,Dehradun,Uttarakhand,30.32,78.03,INLAND,YES
+54,Nainital,Uttarakhand,29.38,79.46,INLAND,YES
+55,Pithoragarh,Uttarakhand,29.58,80.22,INLAND,YES
+56,Rudraprayag,Uttarakhand,30.28,78.98,INLAND,YES
+57,Uttarkashi,Uttarakhand,30.73,78.45,INLAND,YES
+58,Howrah,West Bengal,22.59,88.31,INLAND,NO
+59,Malda,West Bengal,25.01,88.14,INLAND,NO
+60,Murshidabad,West Bengal,24.1,88.25,INLAND,NO
+61,North 24 Parganas,West Bengal,22.72,88.48,INLAND,NO
+62,South 24 Parganas,West Bengal,22.53,88.33,INLAND,NO
