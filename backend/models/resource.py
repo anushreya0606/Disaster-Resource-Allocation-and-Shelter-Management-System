@@ -1,11 +1,7 @@
 from datetime import datetime
-
 from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
-
 from database import Base
-
-
 class Resource(Base):
     __tablename__ = "resources"
 
