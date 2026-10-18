@@ -5,7 +5,6 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
 
-
 class Evacuee(Base):
     __tablename__ = "evacuees"
 
