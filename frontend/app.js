@@ -1,5 +1,4 @@
 "use strict";
-/* Relief Shelter System - browser client. Plain JavaScript, no build step, works offline. */
 
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -327,4 +326,5 @@ async function start() {
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => { });
 paintThemeBtn();
-if (session) start(); else $("#login").hidden = false;
+if (session) start();
+else $("#login").hidden = false;

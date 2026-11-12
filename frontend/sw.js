@@ -1,5 +1,3 @@
-// Service worker: keeps the app usable without a connection.
-// App files are cached on install; GET API calls are network-first with a cached fallback.
 const CACHE = "relief-v1";
 const SHELL = ["/", "/static/app.css", "/static/app.js", "/static/manifest.json"];
 
