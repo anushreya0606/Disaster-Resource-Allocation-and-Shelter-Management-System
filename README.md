@@ -168,12 +168,7 @@ flowchart TD
 - Matrix display: Total Depot Stock, Allocated Resources, Maximum Claim, and Current Need.
 - Prevents resource exhaustion and inter-shelter deadlocks during supply crises.
 
-### 7. Tamper-Proof Cryptographic Audit Ledger
-- Complete chronological audit log of all relief transactions.
-- Block hash visualization with previous hash references and transaction payloads.
-- **One-Click Cryptographic Audit:** Scans all records and mathematically verifies that zero records have been altered post-facto.
-
-### 8. Live OS Telemetry & Concurrency Benchmark Center
+### 7. Live OS Telemetry & Concurrency Benchmark Center
 - System health gauges: Active thread workers, lock wait time (ms), lock contention rate, and throughput (RPS).
 - **Built-in Concurrent Stress Test:** Fires 50 to 500 concurrent worker threads against a single shelter to demonstrate zero overbooking and 100% ACID transaction compliance.
 
@@ -245,5 +240,3 @@ Open your web browser and go to:
    - Click on shelter markers on the map to display 5km proximity radius circles, remaining beds, oxygen cylinders, and contact numbers.
 5. **Show Deadlock Avoidance (Banker's Algorithm):**
    - Open the **Resources** tab. Show how the Available vector, Max claim matrix, and Need matrix dynamically compute safe execution states before granting loans.
-6. **Show Tamper-Proof Cryptographic Hash Chain:**
-   - Open the **Audit** tab. Click **"Verify Cryptographic Chain"** to show real-time verification of the SHA-256 block chain.
